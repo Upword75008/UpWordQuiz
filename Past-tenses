@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Up Word - Quiz Past Tenses</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            transition: background-color 0.3s ease;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .logo {
+            font-size: 3em;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+        
+        .quiz-title {
+            font-size: 1.8em;
+            color: white;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .text-passage {
+            background: rgba(255,255,255,0.9);
+            color: black;
+            padding: 25px;
+            margin: 30px auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            font-size: 1.1em;
+            line-height: 1.8;
+            max-width: 700px;
+            text-align: left;
+            border-left: 5px solid #007bff;
+        }
+        
+        .question-card {
+            background-color: #cde2e8;
+            color: black;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        .question-number {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+        
+        .question-text {
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .options {
+            display: grid;
+            gap: 10px;
+        }
+        
+        .option {
+            background: white;
+            border: 2px solid #ddd;
+            padding: 12px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1em;
+        }
+        
+        .option:hover {
+            background: #f0f8ff;
+            border-color: #007bff;
+        }
+        
+        .option.selected {
+            background: #e3f2fd;
+            border-color: #1976d2;
+        }
+        
+        .option.correct {
+            background: #d4edda;
+            border-color: #28a745;
+            position: relative;
+        }
+        
+        .option.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+            position: relative;
+        }
+        
+        .option.correct::before {
+            content: "✓";
+            color: #28a745;
+            font-weight: bold;
+            font-size: 1.2em;
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .option.incorrect::before {
+            content: "✗";
+            color: #dc3545;
+            font-weight: bold;
+            font-size: 1.2em;
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .correct-answer {
+            background: #d1ecf1;
+            border: 2px solid #bee5eb;
+            color: #0c5460;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        
+        .submit-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 30px auto;
+            display: block;
+            transition: background 0.3s ease;
+        }
+        
+        .submit-btn:hover {
+            background: #0056b3;
+        }
+        
+        .submit-btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+        
+        .results {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: none;
+        }
+        
+        .score {
+            font-size: 2em;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+        
+        .feedback {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 30px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        .footer p {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .footer a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">Up Word</div>
+            <div class="quiz-title">📝 Quiz – Les temps du passé (Past Tenses)</div>
+            <div class="text-passage">
+                Last weekend, we decide to visit a nearby town that we never see before. We has heard it was charming, with lots of little shops and cafés. When we arrived, it rained heavily, so we waited in the car until it stop. Then we walk through the main square and take pictures of the old buildings. At lunchtime, we found a nice place to eat and order some local dishes. It was delicious, and I'm glad we have made the trip.
+            </div>
+        </div>
+        
+        <div class="quiz-container">
+            <div class="question-card">
+                <div class="question-number">1. Quelle est la bonne correction de la phrase suivante ?</div>
+                <div class="question-text">"Last weekend, we decide to visit a nearby town..."</div>
+                <div class="options">
+                    <div class="option" data-question="0" data-answer="a">a) decided</div>
+                    <div class="option" data-question="0" data-answer="b">b) have decided</div>
+                    <div class="option" data-question="0" data-answer="c">c) decide</div>
+                    <div class="option" data-question="0" data-answer="d">d) had decided</div>
+                </div>
+            </div>
+            
+            <div class="question-card">
+                <div class="question-number">2. Quelle est la bonne correction de la phrase suivante ?</div>
+                <div class="question-text">"...that we never see before."</div>
+                <div class="options">
+                    <div class="option" data-question="1" data-answer="a">a) we had never seen</div>
+                    <div class="option" data-question="1" data-answer="b">b) we never saw</div>
+                    <div class="option" data-question="1" data-answer="c">c) we didn't see</div>
+                    <div class="option" data-question="1" data-answer="d">d) we have never seen</div>
+                </div>
+            </div>
+            
+            <div class="question-card">
+                <div class="question-number">3. Quelle est la bonne correction de la phrase suivante ?</div>
+                <div class="question-text">"We has heard it was charming..."</div>
+                <div class="options">
+                    <div class="option" data-question="2" data-answer="a">a) had heard</div>
+                    <div class="option" data-question="2" data-answer="b">b) have heard</div>
+                    <div class="option" data-question="2" data-answer="c">c) was hearing</div>
+                    <div class="option" data-question="2" data-answer="d">d) has heard</div>
+                </div>
+            </div>
+            
+            <div class="question-card">
+                <div class="question-number">4. Quelle est la bonne correction de la phrase suivante ?</div>
+                <div class="question-text">"It rained heavily, so we waited in the car until it stop."</div>
+                <div class="options">
+                    <div class="option" data-question="3" data-answer="a">a) it stopped</div>
+                    <div class="option" data-question="3" data-answer="b">b) it stops</div>
+                    <div class="option" data-question="3" data-answer="c">c) it has stopped</div>
+                    <div class="option" data-question="3" data-answer="d">d) it was stopping</div>
+                </div>
+            </div>
+            
+            <div class="question-card">
+                <div class="question-number">5. Quelle est la bonne correction de la phrase suivante ?</div>
+                <div class="question-text">"Then we walk through the main square..."</div>
+                <div class="options">
+                    <div class="option" data-question="4" data-answer="a">a) walked</div>
+                    <div class="option" data-question="4" data-answer="b">b) walks</div>
+                    <div class="option" data-question="4" data-answer="c">c) were walking</div>
+                    <div class="option" data-question="4" data-answer="d">d) walking</div>
+                </div>
+            </div>
+            
+            <div class="question-card">
+                <div class="question-number">6. Quelle est la bonne correction de la phrase suivante ?</div>
+                <div class="question-text">"and take pictures of the old buildings."</div>
+                <div class="options">
+                    <div class="option" data-question="5" data-answer="a">a) took</div>
+                    <div class="option" data-question="5" data-answer="b">b) taken</div>
+                    <div class="option" data-question="5" data-answer="c">c) taking</div>
+                    <div class="option" data-question="5" data-answer="d">d) takes</div>
+                </div>
+            </div>
+            
+            <div class="question-card">
+                <div class="question-number">7. Quelle est la bonne correction de la phrase suivante ?</div>
+                <div class="question-text">"and order some local dishes."</div>
+                <div class="options">
+                    <div class="option" data-question="6" data-answer="a">a) ordered</div>
+                    <div class="option" data-question="6" data-answer="b">b) orders</div>
+                    <div class="option" data-question="6" data-answer="c">c) have ordered</div>
+                    <div class="option" data-question="6" data-answer="d">d) had order</div>
+                </div>
+            </div>
+            
+            <div class="question-card">
+                <div class="question-number">8. Quelle est la bonne correction de la phrase suivante ?</div>
+                <div class="question-text">"I'm glad we have made the trip."</div>
+                <div class="options">
+                    <div class="option" data-question="7" data-answer="a">a) we made the trip</div>
+                    <div class="option" data-question="7" data-answer="b">b) we make the trip</div>
+                    <div class="option" data-question="7" data-answer="c">c) we had made the trip</div>
+                    <div class="option" data-question="7" data-answer="d">d) we are making the trip</div>
+                </div>
+            </div>
+            
+            <button class="submit-btn" onclick="submitQuiz()">Valider le quiz</button>
+            
+            <div class="results" id="results">
+                <div class="score" id="scoreDisplay"></div>
+                <div class="feedback" id="feedback"></div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Envie de booster votre score ?</p>
+            <p>Rendez-vous sur notre site et découvrez nos formations :</p>
+            <a href="https://upword.co.uk" target="_blank">upword.co.uk</a>
+        </div>
+    </div>
+
+    <script>
+        // Couleurs de fond aléatoires
+        const colors = ['#8dc63f', '#023762'];
+        const randomColor = colors[Math.floor(Math.random() * colors.length)];
+        document.body.style.backgroundColor = randomColor;
+        
+        // Réponses correctes
+        const correctAnswers = ['a', 'a', 'a', 'a', 'a', 'a', 'a', 'a'];
+        const correctTexts = [
+            'decided',
+            'we had never seen', 
+            'had heard',
+            'it stopped',
+            'walked',
+            'took',
+            'ordered',
+            'we made the trip'
+        ];
+        
+        let userAnswers = new Array(8).fill(null);
+        let quizSubmitted = false;
+        
+        // Gestion des clics sur les options
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                if (quizSubmitted) return;
+                
+                const question = parseInt(this.dataset.question);
+                const answer = this.dataset.answer;
+                
+                // Désélectionner les autres options de la même question
+                document.querySelectorAll(`[data-question="${question}"]`).forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                
+                // Sélectionner cette option
+                this.classList.add('selected');
+                userAnswers[question] = answer;
+            });
+        });
+        
+        function submitQuiz() {
+            if (quizSubmitted) return;
+            
+            // Vérifier que toutes les questions ont une réponse
+            if (userAnswers.includes(null)) {
+                alert('Veuillez répondre à toutes les questions avant de valider.');
+                return;
+            }
+            
+            quizSubmitted = true;
+            
+            let score = 0;
+            
+            // Marquer les réponses et afficher les corrections
+            for (let i = 0; i < 8; i++) {
+                const userAnswer = userAnswers[i];
+                const correct = correctAnswers[i];
+                const questionOptions = document.querySelectorAll(`[data-question="${i}"]`);
+                
+                questionOptions.forEach(option => {
+                    const optionAnswer = option.dataset.answer;
+                    
+                    if (optionAnswer === correct) {
+                        option.classList.add('correct');
+                        if (optionAnswer === userAnswer) {
+                            score++;
+                        }
+                    } else if (optionAnswer === userAnswer && optionAnswer !== correct) {
+                        option.classList.add('incorrect');
+                        
+                        // Afficher la bonne réponse
+                        const correctAnswerDiv = document.createElement('div');
+                        correctAnswerDiv.className = 'correct-answer';
+                        correctAnswerDiv.textContent = `Bonne réponse : ${correct}) ${correctTexts[i]}`;
+                        option.parentNode.appendChild(correctAnswerDiv);
+                    }
+                });
+            }
+            
+            // Afficher les résultats
+            displayResults(score);
+            
+            // Désactiver le bouton
+            document.querySelector('.submit-btn').disabled = true;
+            document.querySelector('.submit-btn').textContent = 'Quiz terminé';
+        }
+        
+        function displayResults(score) {
+            const resultsDiv = document.getElementById('results');
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            const feedback = document.getElementById('feedback');
+            
+            scoreDisplay.textContent = `${score}/8`;
+            
+            let feedbackText = '';
+            let feedbackColor = '';
+            
+            if (score === 8) {
+                feedbackText = '🎯 Excellent ! Tu maîtrises les temps du passé !';
+                feedbackColor = '#28a745';
+            } else if (score >= 6) {
+                feedbackText = '👏 Très bien ! Encore un petit effort pour viser la perfection.';
+                feedbackColor = '#007bff';
+            } else if (score >= 4) {
+                feedbackText = '👍 Pas mal, mais revois les bases du past simple et du past perfect.';
+                feedbackColor = '#ffc107';
+            } else {
+                feedbackText = '📚 Un petit rappel des temps du passé s\'impose !';
+                feedbackColor = '#dc3545';
+            }
+            
+            feedback.textContent = feedbackText;
+            feedback.style.backgroundColor = feedbackColor + '20';
+            feedback.style.color = feedbackColor;
+            feedback.style.border = `2px solid ${feedbackColor}`;
+            
+            resultsDiv.style.display = 'block';
+            
+            // Scroll vers les résultats
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
