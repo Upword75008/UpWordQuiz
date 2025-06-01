@@ -10,88 +10,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-<script>
-const answers = {
-    q1: 'C',
-    q2: 'C',
-    q3: 'C',
-    q4: 'B',
-    q5: 'A'
-};
 
-document.getElementById('quizForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    let score = 0;
-    const form = e.target;
-    const totalQuestions = Object.keys(answers).length;
-
-    for (let q in answers) {
-        const selected = form.querySelector(`input[name="${q}"]:checked`);
-        const options = form.querySelectorAll(`input[name="${q}"]`);
-        options.forEach(opt => {
-            const optionDiv = opt.closest('.option');
-            optionDiv.classList.remove('correct-answer', 'wrong-answer');
-            optionDiv.querySelector('.feedback').textContent = '';
-        });
-
-        if (selected) {
-            const selectedValue = selected.value;
-            const selectedOption = selected.closest('.option');
-            const feedbackSpan = selectedOption.querySelector('.feedback');
-
-            if (selectedValue === answers[q]) {
-                score++;
-                selectedOption.classList.add('correct-answer');
-                feedbackSpan.textContent = '✔';
-                feedbackSpan.classList.add('correct');
-            } else {
-                selectedOption.classList.add('wrong-answer');
-                feedbackSpan.textContent = '✘';
-                feedbackSpan.classList.add('incorrect');
-
-                // Marquer la bonne réponse
-                const correctOption = form.querySelector(`input[name="${q}"][value="${answers[q]}"]`).closest('.option');
-                correctOption.classList.add('correct-answer');
-                correctOption.querySelector('.feedback').textContent = '✔';
-                correctOption.querySelector('.feedback').classList.add('correct');
-            }
-        }
-    }
-
-    // Afficher les résultats
-    document.getElementById('results').style.display = 'block';
-    const scoreDisplay = document.getElementById('scoreDisplay');
-    scoreDisplay.textContent = `Your Score: ${score} / ${totalQuestions}`;
-
-    const commentDisplay = document.getElementById('commentDisplay');
-    if (score === totalQuestions) {
-        commentDisplay.textContent = "Perfect! Great job! 🎉";
-    } else if (score >= totalQuestions * 0.6) {
-        commentDisplay.textContent = "Good work! Review the tricky ones. 💪";
-    } else {
-        commentDisplay.textContent = "Keep practicing! You’ll get there. 🚀";
-    }
-
-    // Désactiver le bouton submit après soumission
-    form.querySelector('.submit-btn').disabled = true;
-});
-
-function resetQuiz() {
-    const form = document.getElementById('quizForm');
-    form.reset();
-    document.getElementById('results').style.display = 'none';
-    form.querySelector('.submit-btn').disabled = false;
-
-    const allOptions = form.querySelectorAll('.option');
-    allOptions.forEach(opt => {
-        opt.classList.remove('correct-answer', 'wrong-answer');
-        const feedback = opt.querySelector('.feedback');
-        feedback.textContent = '';
-        feedback.classList.remove('correct', 'incorrect');
-    });
-}
-</script>
         body {
             font-family: 'Arial', sans-serif;
             line-height: 1.6;
@@ -283,6 +202,8 @@ function resetQuiz() {
         .reset-btn:hover {
             background: #7ab32f;
         }
+
+
     </style>
 </head>
 <body>
@@ -291,6 +212,8 @@ function resetQuiz() {
             <h1 class="logo">UP WORD</h1>
             <p class="subtitle">Pronunciation Patterns Quiz</p>
         </div>
+
+
 
         <div class="quiz-container">
             <form id="quizForm">
@@ -351,7 +274,7 @@ function resetQuiz() {
                         </div>
                         <div class="option">
                             <input type="radio" name="q3" value="C" id="q3c">
-                            <label for="q3c">C) PHO-to-gra-pher</label>
+                            <label for="q3c">C) pho-TOG-ra-pher</label>
                             <span class="feedback"></span>
                         </div>
                     </div>
@@ -399,7 +322,7 @@ function resetQuiz() {
                     </div>
                 </div>
 
-                <button type="submit" class="submit-btn">Submit Quiz</button>
+                <button type="button" class="submit-btn" onclick="submitQuiz()">Submit Quiz</button>
             </form>
 
             <div class="results" id="results">
@@ -423,17 +346,17 @@ function resetQuiz() {
         document.body.style.backgroundColor = randomColor;
 
         const correctAnswers = {
-            q1: 'C',
-            q2: 'C', 
-            q3: 'B',
-            q4: 'B',
-            q5: 'A'
+            q1: 'C', // tough (tʌf) vs through/threw (θruː)
+            q2: 'C', // bead (biːd) vs read past/bread (red)
+            q3: 'B', // pho-TOG-ra-phy (stress on 2nd syllable) vs PHO-to-graph/pho-TOG-ra-pher (stress on 1st/2nd syllable)
+            q4: 'B', // machine (ʃ sound) vs chair/church (tʃ sound)
+            q5: 'A'  // honest (silent h)
         };
 
         const comments = {
             5: "🎵 Perfect pronunciation awareness! Sound like a native with UP Word's pronunciation workshops!",
             4: "🔊 Great ear for English sounds! Fine-tune your accent with UP Word's speaking practice sessions!",
-            3: "🔊 Great ear for English sounds! Fine-tune your accent with UP Word's speaking practice sessions!",
+            3: "🔊 Good progress! Fine-tune your accent with UP Word's speaking practice sessions!",
             2: "👂 Pronunciation is key to clear communication! UP Word's audio-focused lessons will boost your confidence!",
             1: "👂 Pronunciation is key to clear communication! UP Word's audio-focused lessons will boost your confidence!",
             0: "🎤 Everyone can improve their pronunciation! UP Word uses proven techniques to perfect your English sounds!"
@@ -443,23 +366,14 @@ function resetQuiz() {
             let score = 0;
             const totalQuestions = 5;
             
-            console.log('Quiz submitted!'); // Debug
-            
             // Check if all questions are answered
-            let allAnswered = true;
             for (let i = 1; i <= totalQuestions; i++) {
                 const questionName = `q${i}`;
                 const selectedAnswer = document.querySelector(`input[name="${questionName}"]:checked`);
                 if (!selectedAnswer) {
-                    allAnswered = false;
-                    console.log(`Question ${i} not answered`); // Debug
-                    break;
+                    alert('Veuillez répondre à toutes les questions avant de soumettre le quiz.');
+                    return;
                 }
-            }
-            
-            if (!allAnswered) {
-                alert('Veuillez répondre à toutes les questions avant de soumettre le quiz.');
-                return false;
             }
             
             // Process each question
@@ -467,8 +381,6 @@ function resetQuiz() {
                 const questionName = `q${i}`;
                 const selectedAnswer = document.querySelector(`input[name="${questionName}"]:checked`);
                 const allOptions = document.querySelectorAll(`input[name="${questionName}"]`);
-                
-                console.log(`Question ${i}: Selected ${selectedAnswer.value}, Correct ${correctAnswers[questionName]}`); // Debug
                 
                 const isCorrect = selectedAnswer.value === correctAnswers[questionName];
                 if (isCorrect) score++;
@@ -494,53 +406,28 @@ function resetQuiz() {
                 });
             }
             
-            console.log(`Final score: ${score}/${totalQuestions}`); // Debug
-            
             // Show results
-            const scoreElement = document.getElementById('scoreDisplay');
-            const commentElement = document.getElementById('commentDisplay');
-            const resultsElement = document.getElementById('results');
-            const submitButton = document.querySelector('.submit-btn');
-            
-            if (scoreElement) scoreElement.textContent = `Score: ${score}/${totalQuestions}`;
-            if (commentElement) commentElement.textContent = comments[score];
-            if (resultsElement) resultsElement.style.display = 'block';
-            if (submitButton) submitButton.style.display = 'none';
+            document.getElementById('scoreDisplay').textContent = `Score: ${score}/${totalQuestions}`;
+            document.getElementById('commentDisplay').textContent = comments[score];
+            document.getElementById('results').style.display = 'block';
+            document.querySelector('.submit-btn').style.display = 'none';
             
             // Scroll to results
             setTimeout(() => {
-                if (resultsElement) {
-                    resultsElement.scrollIntoView({ behavior: 'smooth' });
-                }
+                document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
             }, 200);
-            
-            return false;
         }
-
-        // Add event listener when DOM is loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('quizForm');
-            if (form) {
-                form.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    submitQuiz();
-                });
-            }
-        });
 
         function resetQuiz() {
             // Reset form
-            const form = document.getElementById('quizForm');
-            if (form) form.reset();
+            document.getElementById('quizForm').reset();
             
             // Clear all feedback and styling
             document.querySelectorAll('.option').forEach(option => {
                 option.classList.remove('correct-answer', 'wrong-answer');
                 const feedback = option.querySelector('.feedback');
-                if (feedback) {
-                    feedback.textContent = '';
-                    feedback.classList.remove('correct', 'incorrect');
-                }
+                feedback.textContent = '';
+                feedback.classList.remove('correct', 'incorrect');
             });
             
             // Re-enable all radio buttons
@@ -549,15 +436,12 @@ function resetQuiz() {
             });
             
             // Hide results, show submit button
-            const resultsElement = document.getElementById('results');
-            const submitButton = document.querySelector('.submit-btn');
-            
-            if (resultsElement) resultsElement.style.display = 'none';
-            if (submitButton) submitButton.style.display = 'block';
+            document.getElementById('results').style.display = 'none';
+            document.querySelector('.submit-btn').style.display = 'block';
             
             // Scroll to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     </script>
 </body>
-</html>
+                                </html>
