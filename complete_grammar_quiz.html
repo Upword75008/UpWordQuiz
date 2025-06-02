@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UP Word - Common Grammar Mistakes Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #8dc63f;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            background-color: #8dc63f;
+        }
+
+        .logo {
+            width: 300px;
+            height: auto;
+        }
+
+        .container {
+            flex: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 15px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #023762;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+
+        .instructions {
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .question {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #8dc63f;
+        }
+
+        .question-text {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            font-weight: bold;
+            color: #023762;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            background-color: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            border-color: #8dc63f;
+            background-color: #f0f8e8;
+        }
+
+        .option input[type="radio"] {
+            margin-right: 10px;
+            scale: 1.2;
+        }
+
+        .option.correct {
+            border-color: #28a745;
+            background-color: #d4edda;
+        }
+
+        .option.incorrect {
+            border-color: #dc3545;
+            background-color: #f8d7da;
+        }
+
+        .result-icon {
+            margin-left: auto;
+            font-size: 1.5em;
+        }
+
+        .correct-answer {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #d4edda;
+            border-radius: 5px;
+            color: #155724;
+            font-weight: bold;
+        }
+
+        .quiz-buttons {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .btn {
+            background-color: #023762;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #034a8a;
+        }
+
+        .btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .results {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+        }
+
+        .score {
+            font-size: 2em;
+            font-weight: bold;
+            color: #023762;
+            margin-bottom: 15px;
+        }
+
+        .comment {
+            font-size: 1.2em;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .footer {
+            background-color: #023762;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: auto;
+        }
+
+        .footer a {
+            color: #8dc63f;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+            
+            
+            h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-container">
+        <h1 style="color: white; font-size: 3em; margin: 0; font-weight: bold;">Up Word</h1>
+    </div>
+
+    <div class="container">
+        <h1>Common Grammar Mistakes</h1>
+        <p class="instructions">Choisissez la bonne correction pour chaque phrase.</p>
+
+        <div id="quiz">
+            <div class="question" data-question="1">
+                <div class="question-text">"I have been living here since 5 years."</div>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q1" value="a">
+                        a) since 5 years
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q1" value="b">
+                        b) for 5 years
+                    </label>
+                </div>
+            </div>
+
+            <div class="question" data-question="2">
+                <div class="question-text">"She don't like coffee."</div>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q2" value="a">
+                        a) don't like
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q2" value="b">
+                        b) doesn't like
+                    </label>
+                </div>
+            </div>
+
+            <div class="question" data-question="3">
+                <div class="question-text">"I'm very interested about this topic."</div>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q3" value="a">
+                        a) interested about
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q3" value="b">
+                        b) interested in
+                    </label>
+                </div>
+            </div>
+
+            <div class="question" data-question="4">
+                <div class="question-text">"Can you borrow me your pen?"</div>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q4" value="a">
+                        a) borrow me
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q4" value="b">
+                        b) lend me
+                    </label>
+                </div>
+            </div>
+
+            <div class="question" data-question="5">
+                <div class="question-text">"I have visited Paris last year."</div>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q5" value="a">
+                        a) have visited
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q5" value="b">
+                        b) visited
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz-buttons">
+            <button class="btn" onclick="checkAnswers()">Vérifier les réponses</button>
+            <button class="btn" onclick="resetQuiz()" style="display: none;" id="resetBtn">Recommencer</button>
+        </div>
+
+        <div class="results" id="results">
+            <div class="score" id="scoreDisplay"></div>
+            <div class="comment" id="commentDisplay"></div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Envie de booster votre score ? Rendez-vous sur notre site et découvrez nos formations sur notre site <a href="https://upword.co.uk" target="_blank">upword.co.uk</a></p>
+    </div>
+
+    <script>
+        const correctAnswers = {
+            q1: 'b',
+            q2: 'b',
+            q3: 'b',
+            q4: 'b',
+            q5: 'b'
+        };
+
+        const correctTexts = {
+            q1: 'Correct: for 5 years (durée)',
+            q2: 'Correct: doesn\'t like (3ème personne du singulier)',
+            q3: 'Correct: interested in (préposition)',
+            q4: 'Correct: lend me (prêter vs emprunter)',
+            q5: 'Correct: visited (passé simple avec "last year")'
+        };
+
+        const comments = {
+            5: "🏆 Grammar guru! You have an excellent eye for detail. UP Word can help you perfect your advanced structures!",
+            4: "✨ Well done! You catch most errors. Polish your skills with UP Word's targeted grammar modules!",
+            3: "✨ Well done! You catch most errors. Polish your skills with UP Word's targeted grammar modules!",
+            2: "📚 Good effort! Grammar rules can be tricky. UP Word breaks them down into manageable lessons!",
+            1: "📚 Good effort! Grammar rules can be tricky. UP Word breaks them down into manageable lessons!",
+            0: "🎯 No problem! Grammar is learnable with the right method. UP Word makes it simple and clear."
+        };
+
+        function checkAnswers() {
+            let score = 0;
+            let totalQuestions = 5;
+
+            // Vérifier chaque question
+            for (let i = 1; i <= totalQuestions; i++) {
+                const questionName = `q${i}`;
+                const selectedOption = document.querySelector(`input[name="${questionName}"]:checked`);
+                const questionDiv = document.querySelector(`[data-question="${i}"]`);
+                const options = questionDiv.querySelectorAll('.option');
+
+                // Réinitialiser les styles
+                options.forEach(option => {
+                    option.classList.remove('correct', 'incorrect');
+                    const resultIcon = option.querySelector('.result-icon');
+                    if (resultIcon) {
+                        resultIcon.remove();
+                    }
+                });
+
+                // Supprimer les anciennes réponses correctes affichées
+                const oldCorrectAnswer = questionDiv.querySelector('.correct-answer');
+                if (oldCorrectAnswer) {
+                    oldCorrectAnswer.remove();
+                }
+
+                if (selectedOption) {
+                    const selectedValue = selectedOption.value;
+                    const selectedLabel = selectedOption.closest('.option');
+
+                    if (selectedValue === correctAnswers[questionName]) {
+                        // Réponse correcte
+                        selectedLabel.classList.add('correct');
+                        selectedLabel.innerHTML += '<span class="result-icon">✓</span>';
+                        score++;
+                    } else {
+                        // Réponse incorrecte
+                        selectedLabel.classList.add('incorrect');
+                        selectedLabel.innerHTML += '<span class="result-icon">✗</span>';
+                        
+                        // Montrer la bonne réponse
+                        const correctOption = questionDiv.querySelector(`input[value="${correctAnswers[questionName]}"]`).closest('.option');
+                        correctOption.classList.add('correct');
+                        correctOption.innerHTML += '<span class="result-icon">✓</span>';
+
+                        // Afficher l'explication
+                        const correctAnswerDiv = document.createElement('div');
+                        correctAnswerDiv.className = 'correct-answer';
+                        correctAnswerDiv.textContent = correctTexts[questionName];
+                        questionDiv.appendChild(correctAnswerDiv);
+                    }
+                }
+
+                // Désactiver les options après vérification
+                options.forEach(option => {
+                    const input = option.querySelector('input');
+                    input.disabled = true;
+                    option.style.cursor = 'default';
+                });
+            }
+
+            // Afficher les résultats
+            document.getElementById('scoreDisplay').textContent = `Score: ${score}/${totalQuestions}`;
+            document.getElementById('commentDisplay').textContent = comments[score];
+            document.getElementById('results').style.display = 'block';
+            
+            // Masquer le bouton de vérification et afficher le bouton de reset
+            event.target.style.display = 'none';
+            document.getElementById('resetBtn').style.display = 'inline-block';
+
+            // Faire défiler vers les résultats
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function resetQuiz() {
+            // Réinitialiser tous les inputs
+            const inputs = document.querySelectorAll('input[type="radio"]');
+            inputs.forEach(input => {
+                input.checked = false;
+                input.disabled = false;
+            });
+
+            // Réinitialiser les styles des options
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => {
+                option.classList.remove('correct', 'incorrect');
+                option.style.cursor = 'pointer';
+                const resultIcon = option.querySelector('.result-icon');
+                if (resultIcon) {
+                    resultIcon.remove();
+                }
+            });
+
+            // Supprimer les réponses correctes affichées
+            const correctAnswers = document.querySelectorAll('.correct-answer');
+            correctAnswers.forEach(answer => answer.remove());
+
+            // Masquer les résultats
+            document.getElementById('results').style.display = 'none';
+
+            // Réinitialiser les boutons
+            document.querySelector('.btn').style.display = 'inline-block';
+            document.getElementById('resetBtn').style.display = 'none';
+
+            // Faire défiler vers le haut du quiz
+            document.getElementById('quiz').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
