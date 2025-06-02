@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UP Word Quiz - American vs British English</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #8dc63f;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            flex: 1;
+        }
+        
+        .logo-container {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .logo {
+            width: 200px;
+            height: auto;
+            background-color: #1e3a5f;
+            border-radius: 15px;
+            padding: 20px;
+            display: inline-block;
+        }
+        
+        .logo-content {
+            color: white;
+            font-weight: bold;
+        }
+        
+        .up-text {
+            font-size: 48px;
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+        
+        .word-text {
+            font-size: 32px;
+            font-style: italic;
+            border-top: 3px solid white;
+            padding-top: 8px;
+        }
+        
+        .green-dot {
+            width: 12px;
+            height: 12px;
+            background-color: #8dc63f;
+            border-radius: 50%;
+            display: inline-block;
+            margin-left: 5px;
+        }
+        
+        .quiz-container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #023762;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+        
+        .question {
+            margin-bottom: 25px;
+            padding: 20px;
+            border: 2px solid #f0f0f0;
+            border-radius: 10px;
+            background-color: #fafafa;
+        }
+        
+        .question h3 {
+            color: #023762;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .option {
+            padding: 12px 15px;
+            background-color: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .option:hover {
+            border-color: #8dc63f;
+            background-color: #f8fdf4;
+        }
+        
+        .option.selected {
+            border-color: #023762;
+            background-color: #e8f4fd;
+        }
+        
+        .option.correct {
+            border-color: #4CAF50;
+            background-color: #e8f5e8;
+        }
+        
+        .option.incorrect {
+            border-color: #f44336;
+            background-color: #ffeaea;
+        }
+        
+        .check-mark {
+            color: #4CAF50;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .cross-mark {
+            color: #f44336;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .correct-answer {
+            color: #4CAF50;
+            font-weight: bold;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        
+        .submit-btn {
+            display: block;
+            width: 200px;
+            margin: 30px auto;
+            padding: 15px;
+            background-color: #023762;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .submit-btn:hover {
+            background-color: #034a8a;
+        }
+        
+        .submit-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .results {
+            text-align: center;
+            margin-top: 30px;
+            padding: 25px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .score {
+            font-size: 24px;
+            font-weight: bold;
+            color: #023762;
+            margin-bottom: 15px;
+        }
+        
+        .comment {
+            font-size: 18px;
+            color: #333;
+            line-height: 1.5;
+        }
+        
+        .footer {
+            background-color: #023762;
+            color: white;
+            text-align: center;
+            padding: 25px;
+            margin-top: 40px;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        
+        .footer a {
+            color: #8dc63f;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .logo {
+                width: 150px;
+                padding: 15px;
+            }
+            
+            .up-text {
+                font-size: 36px;
+            }
+            
+            .word-text {
+                font-size: 24px;
+            }
+            
+            .quiz-container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo-container">
+            <div class="logo">
+                <div class="logo-content">
+                    <div class="up-text">UP<span class="green-dot"></span></div>
+                    <div class="word-text">word</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="quiz-container">
+            <h1>American vs British English</h1>
+            <p style="text-align: center; margin-bottom: 30px; color: #666;">Match the American word with its British equivalent.</p>
+            
+            <div class="question" data-question="1" data-correct="B">
+                <h3>1. Elevator = ?</h3>
+                <div class="options">
+                    <div class="option" data-answer="A">A) Escalator</div>
+                    <div class="option" data-answer="B">B) Lift</div>
+                    <div class="option" data-answer="C">C) Stairs</div>
+                </div>
+                <div class="correct-answer" style="display: none;">Correct answer: B) Lift</div>
+            </div>
+            
+            <div class="question" data-question="2" data-correct="A">
+                <h3>2. Cookie = ?</h3>
+                <div class="options">
+                    <div class="option" data-answer="A">A) Biscuit</div>
+                    <div class="option" data-answer="B">B) Cracker</div>
+                    <div class="option" data-answer="C">C) Cake</div>
+                </div>
+                <div class="correct-answer" style="display: none;">Correct answer: A) Biscuit</div>
+            </div>
+            
+            <div class="question" data-question="3" data-correct="A">
+                <h3>3. Vacation = ?</h3>
+                <div class="options">
+                    <div class="option" data-answer="A">A) Holiday</div>
+                    <div class="option" data-answer="B">B) Break</div>
+                    <div class="option" data-answer="C">C) Weekend</div>
+                </div>
+                <div class="correct-answer" style="display: none;">Correct answer: A) Holiday</div>
+            </div>
+            
+            <div class="question" data-question="4" data-correct="A">
+                <h3>4. Trash can = ?</h3>
+                <div class="options">
+                    <div class="option" data-answer="A">A) Rubbish bin</div>
+                    <div class="option" data-answer="B">B) Waste basket</div>
+                    <div class="option" data-answer="C">C) Garbage bag</div>
+                </div>
+                <div class="correct-answer" style="display: none;">Correct answer: A) Rubbish bin</div>
+            </div>
+            
+            <div class="question" data-question="5" data-correct="B">
+                <h3>5. Apartment = ?</h3>
+                <div class="options">
+                    <div class="option" data-answer="A">A) House</div>
+                    <div class="option" data-answer="B">B) Flat</div>
+                    <div class="option" data-answer="C">C) Room</div>
+                </div>
+                <div class="correct-answer" style="display: none;">Correct answer: B) Flat</div>
+            </div>
+            
+            <button class="submit-btn" onclick="submitQuiz()">Submit Quiz</button>
+            
+            <div class="results" id="results">
+                <div class="score" id="score"></div>
+                <div class="comment" id="comment"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        Envie de booster votre score ? Rendez-vous sur notre site <a href="https://upword.co.uk" target="_blank">upword.co.uk</a> et découvrez nos formations
+    </div>
+    
+    <script>
+        let userAnswers = {};
+        let quizSubmitted = false;
+        
+        // Add click event listeners to all options
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                if (quizSubmitted) return;
+                
+                const question = this.closest('.question');
+                const questionNum = question.dataset.question;
+                const answer = this.dataset.answer;
+                
+                // Remove selected class from all options in this question
+                question.querySelectorAll('.option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                
+                // Add selected class to clicked option
+                this.classList.add('selected');
+                
+                // Store user answer
+                userAnswers[questionNum] = answer;
+            });
+        });
+        
+        function submitQuiz() {
+            if (Object.keys(userAnswers).length < 5) {
+                alert('Please answer all questions before submitting.');
+                return;
+            }
+            
+            quizSubmitted = true;
+            let score = 0;
+            
+            // Check each question
+            document.querySelectorAll('.question').forEach(question => {
+                const questionNum = question.dataset.question;
+                const correctAnswer = question.dataset.correct;
+                const userAnswer = userAnswers[questionNum];
+                const selectedOption = question.querySelector(`[data-answer="${userAnswer}"]`);
+                const correctOption = question.querySelector(`[data-answer="${correctAnswer}"]`);
+                const correctAnswerDiv = question.querySelector('.correct-answer');
+                
+                if (userAnswer === correctAnswer) {
+                    // Correct answer
+                    score++;
+                    selectedOption.classList.add('correct');
+                    selectedOption.innerHTML += ' <span class="check-mark">✓</span>';
+                } else {
+                    // Incorrect answer
+                    selectedOption.classList.add('incorrect');
+                    selectedOption.innerHTML += ' <span class="cross-mark">✗</span>';
+                    correctOption.classList.add('correct');
+                    correctOption.innerHTML += ' <span class="check-mark">✓</span>';
+                    correctAnswerDiv.style.display = 'block';
+                }
+            });
+            
+            // Show results
+            showResults(score);
+            
+            // Disable submit button
+            document.querySelector('.submit-btn').disabled = true;
+            document.querySelector('.submit-btn').textContent = 'Quiz Completed';
+        }
+        
+        function showResults(score) {
+            const resultsDiv = document.getElementById('results');
+            const scoreDiv = document.getElementById('score');
+            const commentDiv = document.getElementById('comment');
+            
+            scoreDiv.textContent = `Your Score: ${score}/5`;
+            
+            let comment = '';
+            switch(score) {
+                case 5:
+                    comment = '🌍 Globally fluent! You understand English variations worldwide. UP Word teaches both American and British English!';
+                    break;
+                case 4:
+                case 3:
+                    comment = '🇺🇸🇬🇧 Good international awareness! Master both varieties with UP Word\'s comprehensive approach!';
+                    break;
+                case 2:
+                case 1:
+                    comment = '🗺️ English varies worldwide! UP Word prepares you for global communication in any English-speaking country!';
+                    break;
+                case 0:
+                    comment = '🌐 Discover the richness of English varieties! UP Word exposes you to different English cultures and expressions!';
+                    break;
+            }
+            
+            commentDiv.textContent = comment;
+            resultsDiv.style.display = 'block';
+            
+            // Scroll to results
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
