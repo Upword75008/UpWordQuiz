@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Up Word - Quiz Vocabulaire Culturel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-bottom: 10px;
+        }
+
+        .progress {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            height: 8px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: #a3e635;
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .page-info {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .quiz-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-item.correct {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.2);
+        }
+
+        .quiz-item.incorrect {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .word {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #a3e635;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #1e3a8a;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        select:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(163, 230, 53, 0.3);
+        }
+
+        select:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .correction {
+            margin-top: 10px;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            display: none;
+        }
+
+        .correction.show {
+            display: block;
+        }
+
+        .correction.correct-answer {
+            background: rgba(16, 185, 129, 0.3);
+            color: #10b981;
+        }
+
+        .correction.wrong-answer {
+            background: rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .check-btn {
+            background: #a3e635;
+            color: #1e3a8a;
+        }
+
+        .check-btn:hover:not(:disabled) {
+            background: #84cc16;
+            transform: translateY(-2px);
+        }
+
+        .next-btn {
+            background: #10b981;
+            color: white;
+            display: none;
+        }
+
+        .next-btn:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+
+        .reset-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .reset-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .score {
+            text-align: center;
+            font-size: 1.1em;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+        }
+
+        .final-score {
+            text-align: center;
+            font-size: 1.3em;
+            margin: 20px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #a3e635, #84cc16);
+            color: #1e3a8a;
+            border-radius: 12px;
+            font-weight: bold;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        .footer strong {
+            color: #a3e635;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">Up Word</div>
+            <div class="progress">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <div class="page-info" id="page-info"></div>
+        </div>
+
+        <div id="quiz-container">
+            <!-- Quiz items will be generated here -->
+        </div>
+
+        <div class="buttons">
+            <button class="check-btn" id="check-btn" onclick="checkAnswers()">Vérifier</button>
+            <button class="next-btn" id="next-btn" onclick="nextPage()">Page suivante</button>
+            <button class="reset-btn" onclick="resetQuiz()">Recommencer</button>
+        </div>
+
+        <div class="score" id="score"></div>
+
+        <div class="footer">
+            <strong>Vous travaillez dans un magasin de produits culturels ?</strong><br>
+            Apprenez le vocabulaire essentiel pour accueillir et conseiller votre clientèle anglophone avec confiance.
+        </div>
+    </div>
+
+    <script>
+        const categories = [
+            "🎨 Creative Hobbies",
+            "🎭 Entertainment", 
+            "📱 Digital Culture",
+            "📚 Books & Literature",
+            "🎮 Gaming",
+            "🎵 Music"
+        ];
+
+        const allWords = [
+            // Creative Hobbies
+            { word: "painting", correct: "🎨 Creative Hobbies" },
+            { word: "drawing", correct: "🎨 Creative Hobbies" },
+            { word: "crafting", correct: "🎨 Creative Hobbies" },
+            { word: "knitting", correct: "🎨 Creative Hobbies" },
+            { word: "sculpture", correct: "🎨 Creative Hobbies" },
+            { word: "photography", correct: "🎨 Creative Hobbies" },
+            { word: "scrapbooking", correct: "🎨 Creative Hobbies" },
+            
+            // Entertainment
+            { word: "movies", correct: "🎭 Entertainment" },
+            { word: "TV series", correct: "🎭 Entertainment" },
+            { word: "documentaries", correct: "🎭 Entertainment" },
+            { word: "theater", correct: "🎭 Entertainment" },
+            { word: "concerts", correct: "🎭 Entertainment" },
+            { word: "exhibitions", correct: "🎭 Entertainment" },
+            { word: "festivals", correct: "🎭 Entertainment" },
+            
+            // Digital Culture
+            { word: "streaming", correct: "📱 Digital Culture" },
+            { word: "podcasts", correct: "📱 Digital Culture" },
+            { word: "e-books", correct: "📱 Digital Culture" },
+            { word: "online courses", correct: "📱 Digital Culture" },
+            { word: "social media", correct: "📱 Digital Culture" },
+            { word: "blogs", correct: "📱 Digital Culture" },
+            { word: "digital art", correct: "📱 Digital Culture" },
+            
+            // Books & Literature
+            { word: "novels", correct: "📚 Books & Literature" },
+            { word: "fiction", correct: "📚 Books & Literature" },
+            { word: "non-fiction", correct: "📚 Books & Literature" },
+            { word: "comic books", correct: "📚 Books & Literature" },
+            { word: "poetry", correct: "📚 Books & Literature" },
+            { word: "biographies", correct: "📚 Books & Literature" },
+            { word: "thrillers", correct: "📚 Books & Literature" },
+            
+            // Gaming
+            { word: "video games", correct: "🎮 Gaming" },
+            { word: "console games", correct: "🎮 Gaming" },
+            { word: "board games", correct: "🎮 Gaming" },
+            { word: "card games", correct: "🎮 Gaming" },
+            { word: "puzzles", correct: "🎮 Gaming" },
+            { word: "strategy games", correct: "🎮 Gaming" },
+            { word: "action games", correct: "🎮 Gaming" },
+            
+            // Music
+            { word: "pop music", correct: "🎵 Music" },
+            { word: "rock", correct: "🎵 Music" },
+            { word: "classical music", correct: "🎵 Music" },
+            { word: "jazz", correct: "🎵 Music" },
+            { word: "electronic music", correct: "🎵 Music" },
+            { word: "hip-hop", correct: "🎵 Music" },
+            { word: "folk", correct: "🎵 Music" }
+        ];
+
+        let currentPage = 0;
+        let wordsPerPage = 8;
+        let shuffledWords = [];
+        let totalPages = Math.ceil(allWords.length / wordsPerPage);
+        let totalCorrect = 0;
+        let totalAnswered = 0;
+        let currentPageAnswered = false;
+
+        function updateProgress() {
+            const progress = ((currentPage + 1) / totalPages) * 100;
+            document.getElementById('progress-bar').style.width = progress + '%';
+            document.getElementById('page-info').textContent = `Page ${currentPage + 1} sur ${totalPages}`;
+        }
+
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function generateCurrentPage() {
+            const startIndex = currentPage * wordsPerPage;
+            const endIndex = Math.min(startIndex + wordsPerPage, shuffledWords.length);
+            const currentWords = shuffledWords.slice(startIndex, endIndex);
+            
+            // Mélanger également l'ordre des mots sur la page
+            const randomizedCurrentWords = shuffleArray(currentWords);
+            
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = '';
+
+            randomizedCurrentWords.forEach((item, index) => {
+                const quizItem = document.createElement('div');
+                quizItem.className = 'quiz-item';
+                quizItem.id = `item-${index}`;
+                
+                // Mélanger aussi l'ordre des options dans le select
+                const shuffledCategories = shuffleArray(categories);
+                
+                quizItem.innerHTML = `
+                    <div class="word">${item.word}</div>
+                    <select id="select-${index}">
+                        <option value="">Choisissez une catégorie...</option>
+                        ${shuffledCategories.map(cat => `<option value="${cat}">${cat}</option>`).join('')}
+                    </select>
+                    <div class="correction" id="correction-${index}"></div>
+                `;
+                
+                container.appendChild(quizItem);
+            });
+
+            // Stocker les mots de la page actuelle pour la correction
+            window.currentPageWords = randomizedCurrentWords;
+
+            updateProgress();
+            document.getElementById('check-btn').style.display = 'block';
+            document.getElementById('next-btn').style.display = 'none';
+            document.getElementById('check-btn').disabled = false;
+            currentPageAnswered = false;
+            updateScore();
+        }
+
+        function checkAnswers() {
+            if (currentPageAnswered) return;
+            
+            const currentWords = window.currentPageWords;
+            let pageCorrect = 0;
+            
+            currentWords.forEach((item, index) => {
+                const select = document.getElementById(`select-${index}`);
+                const quizItem = document.getElementById(`item-${index}`);
+                const correction = document.getElementById(`correction-${index}`);
+                
+                select.disabled = true;
+                quizItem.classList.remove('correct', 'incorrect');
+                
+                if (select.value === item.correct) {
+                    quizItem.classList.add('correct');
+                    correction.className = 'correction correct-answer show';
+                    correction.innerHTML = `✓ Correct ! "${item.word}" appartient bien à ${item.correct}`;
+                    pageCorrect++;
+                    totalCorrect++;
+                } else {
+                    if (select.value !== '') {
+                        quizItem.classList.add('incorrect');
+                        correction.className = 'correction wrong-answer show';
+                        correction.innerHTML = `✗ Incorrect. "${item.word}" appartient à ${item.correct}`;
+                    } else {
+                        correction.className = 'correction wrong-answer show';
+                        correction.innerHTML = `? Pas de réponse. "${item.word}" appartient à ${item.correct}`;
+                    }
+                }
+                totalAnswered++;
+            });
+
+            document.getElementById('check-btn').disabled = true;
+            currentPageAnswered = true;
+            
+            if (currentPage < totalPages - 1) {
+                document.getElementById('next-btn').style.display = 'block';
+            } else {
+                showFinalScore();
+            }
+            
+            updateScore();
+        }
+
+        function nextPage() {
+            if (currentPage < totalPages - 1) {
+                currentPage++;
+                generateCurrentPage();
+            }
+        }
+
+        function updateScore() {
+            const scoreElement = document.getElementById('score');
+            if (totalAnswered > 0) {
+                const percentage = Math.round((totalCorrect / totalAnswered) * 100);
+                scoreElement.innerHTML = `Score actuel: ${totalCorrect}/${totalAnswered} (${percentage}%)`;
+            } else {
+                scoreElement.innerHTML = '';
+            }
+        }
+
+        function showFinalScore() {
+            const scoreElement = document.getElementById('score');
+            const percentage = Math.round((totalCorrect / totalAnswered) * 100);
+            let message = '';
+            
+            if (percentage >= 90) {
+                message = '🎉 Parfait ! Vous maîtrisez excellemment ce vocabulaire !';
+            } else if (percentage >= 75) {
+                message = '👏 Très bien ! Excellent niveau de vocabulaire !';
+            } else if (percentage >= 60) {
+                message = '👍 Bien joué ! Continuez à vous entraîner !';
+            } else {
+                message = '💪 Bon début ! La pratique vous aidera à progresser !';
+            }
+
+            scoreElement.className = 'final-score';
+            scoreElement.innerHTML = `
+                <div>Quiz terminé !</div>
+                <div>Score final: ${totalCorrect}/${totalAnswered} (${percentage}%)</div>
+                <div style="margin-top: 10px; font-size: 0.9em;">${message}</div>
+            `;
+            
+            document.getElementById('check-btn').style.display = 'none';
+            document.getElementById('next-btn').style.display = 'none';
+        }
+
+        function resetQuiz() {
+            currentPage = 0;
+            totalCorrect = 0;
+            totalAnswered = 0;
+            currentPageAnswered = false;
+            shuffledWords = shuffleArray(allWords);
+            totalPages = Math.ceil(shuffledWords.length / wordsPerPage);
+            document.getElementById('score').className = 'score';
+            generateCurrentPage();
+        }
+
+        // Initialize quiz on page load
+        shuffledWords = shuffleArray(allWords);
+        generateCurrentPage();
+    </script>
+</body>
+</html>
