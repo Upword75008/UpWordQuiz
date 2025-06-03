@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Learner Assessment Form</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
   <style>
     body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: auto; }
     h2 { color: #2c3e50; }
@@ -13,7 +12,10 @@
     textarea, input[type="text"] { width: 100%; padding: 8px; margin-top: 5px; }
     .section { margin-bottom: 30px; border-bottom: 1px solid #ccc; padding-bottom: 20px; }
     .options label { display: inline-block; margin-right: 15px; font-weight: normal; }
-    button { padding: 10px 20px; margin-top: 20px; cursor: pointer; }
+    button { padding: 15px 30px; margin-top: 20px; cursor: pointer; background-color: #3498db; color: white; border: none; border-radius: 5px; font-size: 16px; }
+    button:hover { background-color: #2980b9; }
+    .info-box { background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 5px; padding: 15px; margin-top: 20px; }
+    .info-box h4 { margin-top: 0; color: #495057; }
   </style>
 </head>
 <body>
@@ -51,7 +53,14 @@
     <textarea id="notCovered"></textarea>
   </div>
 
-  <button onclick="submitForm()">Submit and Download PDF / Send by Email</button>
+  <button onclick="generatePDF()">Generate PDF Report</button>
+
+  <div class="info-box" style="display: none;" id="instructions">
+    <h4>📧 Next Steps:</h4>
+    <p><strong>Your PDF report has been generated and downloaded!</strong></p>
+    <p>Please send the PDF file to: <strong>contact@upword.co.uk</strong></p>
+    <p>You can attach the PDF to your email or forward it as needed.</p>
+  </div>
 
   <script>
     const criteria = [
@@ -74,40 +83,92 @@
       container.appendChild(div);
     });
 
-    function submitForm() {
+    function generatePDF() {
       const instructor = document.getElementById('instructor').value;
       const learner = document.getElementById('learner').value;
       const notCovered = document.getElementById('notCovered').value;
 
-      let content = `Instructor: ${instructor}\nLearner: ${learner}\n\nPerformance:\n`;
+      // Validation
+      if (!instructor || !learner) {
+        alert("Please fill in both Instructor's Name and Learner's Name before generating the PDF.");
+        return;
+      }
+
+      // Collect form data
+      let evaluationData = [];
       criteria.forEach((crit, i) => {
         const selected = document.querySelector(`input[name='crit${i}']:checked`);
-        content += `${crit}: ${selected ? selected.value : 'Not answered'}\n`;
+        evaluationData.push({
+          criterion: crit,
+          rating: selected ? selected.value : 'Not answered'
+        });
       });
 
       const objectives = document.querySelector("input[name='objectives']:checked")?.value || 'Not answered';
       const coverage = document.querySelector("input[name='coverage']:checked")?.value || 'Not answered';
 
-      content += `\nTraining Objectives Achieved: ${objectives}\nAll Content Covered: ${coverage}\nNot Covered: ${notCovered}`;
-
       // Generate PDF
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
+      
+      // Title
+      doc.setFontSize(16);
+      doc.text('Learner Assessment Report', 20, 20);
+      
+      // Basic Information
       doc.setFontSize(12);
-      doc.text(content, 10, 10);
-      doc.save(`${learner.replace(/\s+/g, '_')}_Assessment.pdf`);
+      doc.text(`Instructor: ${instructor}`, 20, 40);
+      doc.text(`Learner: ${learner}`, 20, 50);
+      doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 60);
+      
+      // Performance Evaluation
+      doc.setFontSize(14);
+      doc.text('Performance Evaluation:', 20, 80);
+      doc.setFontSize(11);
+      
+      let yPosition = 90;
+      evaluationData.forEach((item, index) => {
+        if (yPosition > 250) {
+          doc.addPage();
+          yPosition = 20;
+        }
+        doc.text(`${index + 1}. ${item.criterion}: ${item.rating}`, 25, yPosition);
+        yPosition += 10;
+      });
+      
+      // Training Objectives
+      yPosition += 10;
+      if (yPosition > 240) {
+        doc.addPage();
+        yPosition = 20;
+      }
+      doc.setFontSize(14);
+      doc.text('Training Objectives:', 20, yPosition);
+      yPosition += 10;
+      doc.setFontSize(11);
+      doc.text(`Objectives Achieved: ${objectives}`, 25, yPosition);
+      yPosition += 10;
+      doc.text(`All Content Covered: ${coverage}`, 25, yPosition);
+      
+      if (notCovered) {
+        yPosition += 10;
+        if (yPosition > 240) {
+          doc.addPage();
+          yPosition = 20;
+        }
+        doc.text('Content Not Covered:', 25, yPosition);
+        yPosition += 10;
+        const lines = doc.splitTextToSize(notCovered, 160);
+        doc.text(lines, 25, yPosition);
+      }
 
-      // Send email with EmailJS
-      emailjs.init("oLDy4ekc072rDf8mO");
+      // Save PDF
+      const fileName = `${learner.replace(/\s+/g, '_')}_Assessment_${new Date().toISOString().split('T')[0]}.pdf`;
+      doc.save(fileName);
 
-      emailjs.send("service_upword", "template_learner_assessment", {
-        to_email: "contact@upword.co.uk",
-        from_name: instructor,
-        learner_name: learner,
-        message: content
-      })
-      .then(() => alert("Formulaire envoyé avec succès par email."),
-            err => alert("Échec de l'envoi : " + JSON.stringify(err)));
+      // Show instructions
+      document.getElementById('instructions').style.display = 'block';
+      document.getElementById('instructions').scrollIntoView({ behavior: 'smooth' });
     }
   </script>
 </body>
