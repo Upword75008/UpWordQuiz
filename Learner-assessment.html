@@ -7,11 +7,19 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: auto; }
-    h2 { color: #2c3e50; }
+    .header { background-color: #1e4a5d; color: white; padding: 20px; border-radius: 10px; margin-bottom: 30px; display: flex; align-items: center; }
+    .header-content { flex: 1; }
+    .company-name { font-size: 28px; font-weight: bold; margin-bottom: 5px; }
+    .tagline { font-size: 14px; color: #a8d4e8; margin-bottom: 15px; }
+    .contact-info { font-size: 12px; color: #d0e8f2; }
+    .logo-placeholder { width: 60px; height: 60px; background-color: #4CAF50; border-radius: 50%; margin-right: 20px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; }
+    h2 { color: #2c3e50; margin-top: 0; }
     label { display: block; margin-top: 10px; font-weight: bold; }
-    textarea, input[type="text"] { width: 100%; padding: 8px; margin-top: 5px; }
+    textarea, input[type="text"], input[type="date"] { width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box; }
     .section { margin-bottom: 30px; border-bottom: 1px solid #ccc; padding-bottom: 20px; }
     .options label { display: inline-block; margin-right: 15px; font-weight: normal; }
+    .date-fields { display: flex; gap: 20px; }
+    .date-field { flex: 1; }
     button { padding: 15px 30px; margin-top: 20px; cursor: pointer; background-color: #3498db; color: white; border: none; border-radius: 5px; font-size: 16px; }
     button:hover { background-color: #2980b9; }
     .info-box { background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 5px; padding: 15px; margin-top: 20px; }
@@ -19,6 +27,18 @@
   </style>
 </head>
 <body>
+  <div class="header">
+    <div class="logo-placeholder">UP</div>
+    <div class="header-content">
+      <div class="company-name">UP word</div>
+      <div class="tagline">ONLINE LANGUAGE COURSES</div>
+      <div class="contact-info">
+        60 rue François 1er, 75008 PARIS<br>
+        01 83 79 24 45
+      </div>
+    </div>
+  </div>
+
   <h2>Trainer Questionnaire – Learner Assessment</h2>
 
   <div class="section">
@@ -27,6 +47,17 @@
 
     <label for="learner">Full Name of Learner:</label>
     <input type="text" id="learner" />
+
+    <div class="date-fields">
+      <div class="date-field">
+        <label for="startDate">Training Start Date:</label>
+        <input type="date" id="startDate" />
+      </div>
+      <div class="date-field">
+        <label for="endDate">Training End Date:</label>
+        <input type="date" id="endDate" />
+      </div>
+    </div>
   </div>
 
   <div class="section">
@@ -86,6 +117,8 @@
     function generatePDF() {
       const instructor = document.getElementById('instructor').value;
       const learner = document.getElementById('learner').value;
+      const startDate = document.getElementById('startDate').value;
+      const endDate = document.getElementById('endDate').value;
       const notCovered = document.getElementById('notCovered').value;
 
       // Validation
@@ -111,22 +144,37 @@
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
       
+      // Header with company info
+      doc.setFillColor(30, 74, 93);
+      doc.rect(10, 10, 190, 30, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(20);
+      doc.text('UP word', 15, 25);
+      doc.setFontSize(10);
+      doc.text('ONLINE LANGUAGE COURSES', 15, 32);
+      doc.text('60 rue François 1er, 75008 PARIS - 01 83 79 24 45', 15, 37);
+      
+      // Reset text color
+      doc.setTextColor(0, 0, 0);
+      
       // Title
       doc.setFontSize(16);
-      doc.text('Learner Assessment Report', 20, 20);
+      doc.text('Learner Assessment Report', 20, 55);
       
       // Basic Information
       doc.setFontSize(12);
-      doc.text(`Instructor: ${instructor}`, 20, 40);
-      doc.text(`Learner: ${learner}`, 20, 50);
-      doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 60);
+      doc.text(`Instructor: ${instructor}`, 20, 75);
+      doc.text(`Learner: ${learner}`, 20, 85);
+      if (startDate) doc.text(`Training Start Date: ${new Date(startDate).toLocaleDateString()}`, 20, 95);
+      if (endDate) doc.text(`Training End Date: ${new Date(endDate).toLocaleDateString()}`, 20, 105);
+      doc.text(`Report Generated: ${new Date().toLocaleDateString()}`, 20, 115);
       
       // Performance Evaluation
       doc.setFontSize(14);
-      doc.text('Performance Evaluation:', 20, 80);
+      doc.text('Performance Evaluation:', 20, 135);
       doc.setFontSize(11);
       
-      let yPosition = 90;
+      let yPosition = 145;
       evaluationData.forEach((item, index) => {
         if (yPosition > 250) {
           doc.addPage();
