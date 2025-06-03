@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Learner Assessment Form</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: auto; }
+    h2 { color: #2c3e50; }
+    label { display: block; margin-top: 10px; font-weight: bold; }
+    textarea, input[type="text"] { width: 100%; padding: 8px; margin-top: 5px; }
+    .section { margin-bottom: 30px; border-bottom: 1px solid #ccc; padding-bottom: 20px; }
+    .options label { display: inline-block; margin-right: 15px; font-weight: normal; }
+    button { padding: 10px 20px; margin-top: 20px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h2>Trainer Questionnaire – Learner Assessment</h2>
+
+  <div class="section">
+    <label for="instructor">Instructor's Name:</label>
+    <input type="text" id="instructor" />
+
+    <label for="learner">Full Name of Learner:</label>
+    <input type="text" id="learner" />
+  </div>
+
+  <div class="section">
+    <h3>Learner's Performance Evaluation</h3>
+    <div id="evaluation"></div>
+  </div>
+
+  <div class="section">
+    <h3>Achievement of Training Objectives</h3>
+    <label>Were the training objectives achieved?</label>
+    <div class="options">
+      <label><input type="radio" name="objectives" value="Yes"> Yes</label>
+      <label><input type="radio" name="objectives" value="Partially"> Partially</label>
+      <label><input type="radio" name="objectives" value="No"> No</label>
+    </div>
+
+    <label>Were you able to cover all the content in the program?</label>
+    <div class="options">
+      <label><input type="radio" name="coverage" value="Yes"> Yes</label>
+      <label><input type="radio" name="coverage" value="No"> No</label>
+    </div>
+
+    <label>If no, please specify which parts were not covered and why:</label>
+    <textarea id="notCovered"></textarea>
+  </div>
+
+  <button onclick="submitForm()">Submit and Download PDF / Send by Email</button>
+
+  <script>
+    const criteria = [
+      'Overall Understanding of the Course Content',
+      'Speaking Skills',
+      'Listening Comprehension',
+      'Writing Skills',
+      'Reading Comprehension',
+      'Active Participation During Lessons'
+    ];
+
+    const options = ['Excellent', 'Good', 'Satisfactory', 'Needs Improvement'];
+
+    const container = document.getElementById('evaluation');
+    criteria.forEach((criterion, i) => {
+      const div = document.createElement('div');
+      div.innerHTML = `<label>${i + 1}. ${criterion}</label><div class="options">` +
+        options.map(opt => `<label><input type="radio" name="crit${i}" value="${opt}"> ${opt}</label>`).join('') +
+        `</div>`;
+      container.appendChild(div);
+    });
+
+    function submitForm() {
+      const instructor = document.getElementById('instructor').value;
+      const learner = document.getElementById('learner').value;
+      const notCovered = document.getElementById('notCovered').value;
+
+      let content = `Instructor: ${instructor}\nLearner: ${learner}\n\nPerformance:\n`;
+      criteria.forEach((crit, i) => {
+        const selected = document.querySelector(`input[name='crit${i}']:checked`);
+        content += `${crit}: ${selected ? selected.value : 'Not answered'}\n`;
+      });
+
+      const objectives = document.querySelector("input[name='objectives']:checked")?.value || 'Not answered';
+      const coverage = document.querySelector("input[name='coverage']:checked")?.value || 'Not answered';
+
+      content += `\nTraining Objectives Achieved: ${objectives}\nAll Content Covered: ${coverage}\nNot Covered: ${notCovered}`;
+
+      // Generate PDF
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.setFontSize(12);
+      doc.text(content, 10, 10);
+      doc.save(`${learner.replace(/\s+/g, '_')}_Assessment.pdf`);
+
+      // Send email with EmailJS
+      emailjs.init("YOUR_EMAILJS_USER_ID"); // replace with your EmailJS user ID
+
+      emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
+        to_email: "contact@upword.co.uk",
+        from_name: instructor,
+        learner_name: learner,
+        message: content
+      }).then(() => alert("Form submitted and emailed successfully."),
+              err => alert("Email failed: " + JSON.stringify(err)));
+    }
+  </script>
+</body>
+</html>
