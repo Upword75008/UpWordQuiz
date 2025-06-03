@@ -98,15 +98,16 @@
       doc.save(`${learner.replace(/\s+/g, '_')}_Assessment.pdf`);
 
       // Send email with EmailJS
-      emailjs.init("YOUR_EMAILJS_USER_ID"); // replace with your EmailJS user ID
+      emailjs.init("oLDy4ekc072rDf8mO");
 
-      emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
+      emailjs.send("service_upword", "template_learner_assessment", {
         to_email: "contact@upword.co.uk",
         from_name: instructor,
         learner_name: learner,
         message: content
-      }).then(() => alert("Form submitted and emailed successfully."),
-              err => alert("Email failed: " + JSON.stringify(err)));
+      })
+      .then(() => alert("Formulaire envoyé avec succès par email."),
+            err => alert("Échec de l'envoi : " + JSON.stringify(err)));
     }
   </script>
 </body>
