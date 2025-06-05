@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Test d'anglais - Up Word</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      padding: 20px;
+      color: #333;
+      max-width: 700px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+      color: #0057b7;
+    }
+    .question {
+      margin-bottom: 20px;
+      background: #fff;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+    button {
+      background-color: #0057b7;
+      color: white;
+      padding: 12px 20px;
+      margin: 10px 5px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    button:hover {
+      background-color: #0040a0;
+    }
+    #result {
+      margin-top: 30px;
+      padding: 20px;
+      background: #e0f7e9;
+      border: 2px solid #2e7d32;
+      border-radius: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎯 Test de niveau d’anglais – Up Word</h1>
+  <form id="englishTest">
+    <div class="question">
+      <p><strong>1. What time is it?</strong></p>
+      <label><input type="radio" name="q1" value="a"> It's Tuesday</label><br/>
+      <label><input type="radio" name="q1" value="b"> It's five o'clock</label><br/>
+      <label><input type="radio" name="q1" value="c"> It's cold</label>
+    </div>
+
+    <div class="question">
+      <p><strong>2. Where do you live?</strong></p>
+      <label><input type="radio" name="q2" value="a"> At school</label><br/>
+      <label><input type="radio" name="q2" value="b"> In blue</label><br/>
+      <label><input type="radio" name="q2" value="c"> In Paris</label>
+    </div>
+
+    <div class="question">
+      <p><strong>3. Choose the correct verb: “She ___ to the gym every day.”</strong></p>
+      <label><input type="radio" name="q3" value="a"> goes</label><br/>
+      <label><input type="radio" name="q3" value="b"> go</label><br/>
+      <label><input type="radio" name="q3" value="c"> going</label>
+    </div>
+
+    <div class="question">
+      <p><strong>4. What’s the opposite of “cold”?</strong></p>
+      <label><input type="radio" name="q4" value="a"> Big</label><br/>
+      <label><input type="radio" name="q4" value="b"> Hot</label><br/>
+      <label><input type="radio" name="q4" value="c"> Dark</label>
+    </div>
+
+    <div class="question">
+      <p><strong>5. What’s the plural of “child”?</strong></p>
+      <label><input type="radio" name="q5" value="a"> Childs</label><br/>
+      <label><input type="radio" name="q5" value="b"> Children</label><br/>
+      <label><input type="radio" name="q5" value="c"> Childes</label>
+    </div>
+
+    <div class="question">
+      <p><strong>6. What does “I’m hungry” mean?</strong></p>
+      <label><input type="radio" name="q6" value="a"> I’m tired</label><br/>
+      <label><input type="radio" name="q6" value="b"> I want to eat</label><br/>
+      <label><input type="radio" name="q6" value="c"> I need to sleep</label>
+    </div>
+
+    <button type="button" onclick="submitTest()">Voir le résultat</button>
+    <button type="button" onclick="restartTest()">Recommencer</button>
+  </form>
+
+  <div id="result" class="hidden"></div>
+
+  <script>
+    function submitTest() {
+      const answers = {
+        q1: 'b',
+        q2: 'c',
+        q3: 'a',
+        q4: 'b',
+        q5: 'b',
+        q6: 'b'
+      };
+
+      let score = 0;
+      let total = Object.keys(answers).length;
+
+      for (let key in answers) {
+        const selected = document.querySelector(`input[name="${key}"]:checked`);
+        if (selected && selected.value === answers[key]) {
+          score++;
+        }
+      }
+
+      const resultDiv = document.getElementById('result');
+      resultDiv.classList.remove('hidden');
+      resultDiv.innerHTML = `
+        <h2>🎉 Résultat</h2>
+        <p>Vous avez obtenu <strong>${score} / ${total}</strong> bonnes réponses.</p>
+        <p>${getLevelText(score)}</p>
+      `;
+      resultDiv.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function restartTest() {
+      document.getElementById("englishTest").reset();
+      const resultDiv = document.getElementById('result');
+      resultDiv.classList.add("hidden");
+      resultDiv.innerHTML = "";
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function getLevelText(score) {
+      if (score <= 2) {
+        return "🟡 <strong>Niveau débutant</strong> – Pas d'inquiétude, chaque expert a commencé un jour ! On est là pour vous accompagner, étape par étape.";
+      } else if (score <= 4) {
+        return "🟠 <strong>Niveau intermédiaire</strong> – De bonnes bases ! Avec un peu de pratique, vous allez vraiment décoller 🚀.";
+      } else {
+        return "🟢 <strong>Niveau avancé</strong> – Bravo ! Vous avez un excellent niveau. Il est temps de passer à la vitesse supérieure 💪.";
+      }
+    }
+  </script>
+
+</body>
+</html>
