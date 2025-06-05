@@ -1,152 +1,657 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Test d'anglais</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test d'Anglais - UPword</title>
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background: #f9f9f9;
-      padding: 20px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
       color: #333;
-      max-width: 700px;
-      margin: auto;
-    }
-    h1 {
-      text-align: center;
-      color: #0057b7;
-    }
-    .question {
-      margin-bottom: 20px;
-      background: #fff;
-      padding: 15px;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
-    }
-    button {
-      background-color: #0057b7;
-      color: white;
-      padding: 12px 20px;
-      margin: 10px 5px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 1rem;
-    }
-    button:hover {
-      background-color: #0040a0;
-    }
-    #result {
-      margin-top: 30px;
+      background: linear-gradient(135deg, 
+#667eea 0%, 
+#764ba2 100%);
+      min-height: 100vh;
       padding: 20px;
-      background: #e0f7e9;
-      border: 2px solid #2e7d32;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, 
+#2c3e50, 
+#34495e);
+      color: white;
+      padding: 40px 30px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      font-weight: 300;
+    }
+
+    .header p {
+      font-size: 1.2em;
+      opacity: 0.9;
+    }
+
+    .content {
+      padding: 40px 30px;
+    }
+
+    .section {
+      margin-bottom: 40px;
+      padding: 30px;
+      background: 
+#f8f9fa;
       border-radius: 12px;
+      border-left: 5px solid 
+#3498db;
+    }
+
+    .section h2 {
+      color: 
+#2c3e50;
+      margin-bottom: 20px;
+      font-size: 1.8em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .instruction {
+      background: 
+#e3f2fd;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 25px;
+      border-left: 4px solid 
+#2196f3;
+      font-weight: 500;
+    }
+
+    .question {
+      background: white;
+      padding: 25px;
+      margin: 20px 0;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      border-left: 4px solid 
+#27ae60;
+    }
+
+    .question label {
+      font-size: 1.1em;
+      font-weight: 500;
+      line-height: 1.8;
+      cursor: pointer;
+    }
+
+    .question input[type="radio"] {
+      margin: 0 10px 0 20px;
+      transform: scale(1.2);
+      cursor: pointer;
+    }
+
+    .question input[type="radio"]:checked + label {
+      color: 
+#27ae60;
+      font-weight: 600;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 15px;
+      font-weight: 500;
+      color: 
+#2c3e50;
+    }
+
+    input[type="text"], input[type="email"] {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid 
+#e0e0e0;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.3s ease;
+      margin-top: 8px;
+    }
+
+    input[type="text"]:focus, input[type="email"]:focus {
+      outline: none;
+      border-color: 
+#3498db;
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+    }
+
+    input[type="checkbox"] {
+      margin-right: 10px;
+      transform: scale(1.2);
+      cursor: pointer;
+    }
+
+    button {
+      background: linear-gradient(135deg, 
+#3498db, 
+#2980b9);
+      color: white;
+      padding: 18px 40px;
+      border: none;
+      border-radius: 50px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .test-completed {
+      text-align: center;
+      background: linear-gradient(135deg, 
+#27ae60, 
+#229954);
+      color: white;
+      border-left: none;
+    }
+
+    .test-completed h2 {
+      color: white;
+      font-size: 2.2em;
+      margin-bottom: 20px;
+    }
+
+    .test-completed p {
+      font-size: 1.2em;
+      margin: 15px 0;
+      opacity: 0.95;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(255,255,255,0.2);
+      color: white;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .close-btn:hover {
+      background: rgba(255,255,255,0.3);
+      transform: none;
+      box-shadow: none;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        margin: 10px;
+        border-radius: 10px;
+      }
+
+      .header {
+        padding: 30px 20px;
+      }
+
+      .header h1 {
+        font-size: 2em;
+      }
+
+      .content {
+        padding: 20px 15px;
+      }
+
+      .section {
+        padding: 20px 15px;
+      }
+
+      .question {
+        padding: 20px 15px;
+      }
     }
   </style>
 </head>
 <body>
-
-  <h1>🎯 Test de niveau d’anglais – Up Word</h1>
-  <form id="englishTest">
-    <div class="question">
-      <p><strong>1. What time is it?</strong></p>
-      <label><input type="radio" name="q1" value="a"> It's Tuesday</label><br/>
-      <label><input type="radio" name="q1" value="b"> It's five o'clock</label><br/>
-      <label><input type="radio" name="q1" value="c"> It's cold</label>
+  <div class="container">
+    <div class="header">
+      <h1>🇬🇧 Test d'Anglais UPword</h1>
+      <p>Évaluez votre niveau d'anglais en quelques minutes</p>
     </div>
 
-    <div class="question">
-      <p><strong>2. Where do you live?</strong></p>
-      <label><input type="radio" name="q2" value="a"> At school</label><br/>
-      <label><input type="radio" name="q2" value="b"> In blue</label><br/>
-      <label><input type="radio" name="q2" value="c"> In Paris</label>
+    <div class="content">
+      <form id="englishTest">
+        <!-- Questions de grammaire et vocabulaire -->
+        <div class="section">
+          <h2>📝 Grammaire et Vocabulaire</h2>
+          <div class="instruction">
+            Choisissez la meilleure réponse pour chaque question.
+          </div>
+
+          <div class="question">
+            <label>1. She ___ to the gym every morning.<br>
+              <input type="radio" name="q1" value="a"> a) go<br>
+              <input type="radio" name="q1" value="b"> b) goes<br>
+              <input type="radio" name="q1" value="c"> c) going
+            </label>
+          </div>
+
+          <div class="question">
+            <label>2. If I ___ you, I would accept the job offer.<br>
+              <input type="radio" name="q2" value="a"> a) am<br>
+              <input type="radio" name="q2" value="b"> b) was<br>
+              <input type="radio" name="q2" value="c"> c) were
+            </label>
+          </div>
+
+          <div class="question">
+            <label>3. The meeting has been ___ until next week.<br>
+              <input type="radio" name="q3" value="a"> a) postponed<br>
+              <input type="radio" name="q3" value="b"> b) cancelled<br>
+              <input type="radio" name="q3" value="c"> c) advanced
+            </label>
+          </div>
+
+          <div class="question">
+            <label>4. He's been working here ___ five years.<br>
+              <input type="radio" name="q4" value="a"> a) since<br>
+              <input type="radio" name="q4" value="b"> b) for<br>
+              <input type="radio" name="q4" value="c"> c) during
+            </label>
+          </div>
+
+          <div class="question">
+            <label>5. The project must be completed ___ the end of the month.<br>
+              <input type="radio" name="q5" value="a"> a) until<br>
+              <input type="radio" name="q5" value="b"> b) by<br>
+              <input type="radio" name="q5" value="c"> c) at
+            </label>
+          </div>
+
+          <div class="question">
+            <label>6. What does "to break the ice" mean?<br>
+              <input type="radio" name="q6" value="a"> a) To literally break ice<br>
+              <input type="radio" name="q6" value="b"> b) To start a conversation in a friendly way<br>
+              <input type="radio" name="q6" value="c"> c) To end a relationship
+            </label>
+          </div>
+
+          <div class="question">
+            <label>7. Choose the correct sentence:<br>
+              <input type="radio" name="q7" value="a"> a) I look forward to hear from you<br>
+              <input type="radio" name="q7" value="b"> b) I look forward to hearing from you<br>
+              <input type="radio" name="q7" value="c"> c) I look forward for hearing from you
+            </label>
+          </div>
+
+          <div class="question">
+            <label>8. The report needs to be ___ before tomorrow's presentation.<br>
+              <input type="radio" name="q8" value="a"> a) reviewed<br>
+              <input type="radio" name="q8" value="b"> b) reviewing<br>
+              <input type="radio" name="q8" value="c"> c) review
+            </label>
+          </div>
+
+          <div class="question">
+            <label>9. ___ the weather is bad, we'll still have the outdoor event.<br>
+              <input type="radio" name="q9" value="a"> a) Despite<br>
+              <input type="radio" name="q9" value="b"> b) Although<br>
+              <input type="radio" name="q9" value="c"> c) However
+            </label>
+          </div>
+
+          <div class="question">
+            <label>10. In a business context, "to touch base" means:<br>
+              <input type="radio" name="q10" value="a"> a) To physically touch something<br>
+              <input type="radio" name="q10" value="b"> b) To make brief contact or check in<br>
+              <input type="radio" name="q10" value="c"> c) To return to the office
+            </label>
+          </div>
+        </div>
+
+        <!-- Collecte des coordonnées -->
+        <div class="section">
+          <h2>📝 Vos coordonnées</h2>
+          <label>Prénom : <input type="text" name="prenom" required></label>
+          <label>Nom : <input type="text" name="nom" required></label>
+          <label>Email professionnel : <input type="email" name="email" required></label>
+          <label>Entreprise : <input type="text" name="entreprise"></label>
+          <label>Poste : <input type="text" name="poste"></label>
+          <label>
+            <input type="checkbox" name="consent" required>
+            J'accepte que mes données soient utilisées uniquement pour recevoir les résultats du test et des informations sur les formations proposées. Mes données ne seront ni revendues ni cédées à des tiers.
+          </label>
+        </div>
+        <button type="submit">Envoyer les résultats</button>
+      </form>
+
+      <div id="result" class="section hidden test-completed">
+        <h2>Merci pour votre participation ! 🎉</h2>
+        <p>Votre test a bien été envoyé. Vous recevrez vos résultats par email sous peu.</p>
+        <p>L'équipe UPword vous contactera pour discuter de vos besoins en formation.</p>
+        <button class="close-btn" onclick="window.close()" title="Fermer">×</button>
+        <div style="margin-top: 20px;">
+          <small>Cette fenêtre se fermera automatiquement dans <span id="closeCountdown">10</span> secondes</small>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <div class="question">
-      <p><strong>3. Choose the correct verb: “She ___ to the gym every day.”</strong></p>
-      <label><input type="radio" name="q3" value="a"> goes</label><br/>
-      <label><input type="radio" name="q3" value="b"> go</label><br/>
-      <label><input type="radio" name="q3" value="c"> going</label>
-    </div>
-
-    <div class="question">
-      <p><strong>4. What’s the opposite of “cold”?</strong></p>
-      <label><input type="radio" name="q4" value="a"> Big</label><br/>
-      <label><input type="radio" name="q4" value="b"> Hot</label><br/>
-      <label><input type="radio" name="q4" value="c"> Dark</label>
-    </div>
-
-    <div class="question">
-      <p><strong>5. What’s the plural of “child”?</strong></p>
-      <label><input type="radio" name="q5" value="a"> Childs</label><br/>
-      <label><input type="radio" name="q5" value="b"> Children</label><br/>
-      <label><input type="radio" name="q5" value="c"> Childes</label>
-    </div>
-
-    <div class="question">
-      <p><strong>6. What does “I’m hungry” mean?</strong></p>
-      <label><input type="radio" name="q6" value="a"> I’m tired</label><br/>
-      <label><input type="radio" name="q6" value="b"> I want to eat</label><br/>
-      <label><input type="radio" name="q6" value="c"> I need to sleep</label>
-    </div>
-
-    <button type="button" onclick="submitTest()">Voir le résultat</button>
-    <button type="button" onclick="restartTest()">Recommencer</button>
-  </form>
-
-  <div id="result" class="hidden"></div>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script>
-    function submitTest() {
+    // Variables globales
+    let countdownTimer = null;
+    let closeTimer = null;
+
+    // Calculer le score
+    function calculateScore() {
       const answers = {
-        q1: 'b',
-        q2: 'c',
-        q3: 'a',
-        q4: 'b',
-        q5: 'b',
-        q6: 'b'
+        q1: 'b', // goes
+        q2: 'c', // were
+        q3: 'a', // postponed
+        q4: 'b', // for
+        q5: 'b', // by
+        q6: 'b', // to start a conversation
+        q7: 'b', // I look forward to hearing
+        q8: 'a', // reviewed
+        q9: 'b', // Although
+        q10: 'b' // to make brief contact
       };
 
       let score = 0;
-      let total = Object.keys(answers).length;
-
-      for (let key in answers) {
-        const selected = document.querySelector(`input[name="${key}"]:checked`);
-        if (selected && selected.value === answers[key]) {
+      for (let question in answers) {
+        const selected = document.querySelector(input[name="${question}"]:checked);
+        if (selected && selected.value === answers[question]) {
           score++;
         }
       }
-
-      const resultDiv = document.getElementById('result');
-      resultDiv.classList.remove('hidden');
-      resultDiv.innerHTML = `
-        <h2>🎉 Résultat</h2>
-        <p>Vous avez obtenu <strong>${score} / ${total}</strong> bonnes réponses.</p>
-        <p>${getLevelText(score)}</p>
-      `;
-      resultDiv.scrollIntoView({ behavior: 'smooth' });
+      return score;
     }
 
-    function restartTest() {
-      document.getElementById("englishTest").reset();
-      const resultDiv = document.getElementById('result');
-      resultDiv.classList.add("hidden");
-      resultDiv.innerHTML = "";
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Fermer automatiquement après envoi
+    function startCloseCountdown() {
+      let timeLeft = 15;
+      const countdownSpan = document.getElementById('closeCountdown');
+
+      closeTimer = setInterval(function() {
+        timeLeft--;
+        if (countdownSpan) {
+          countdownSpan.textContent = timeLeft;
+        }
+
+        if (timeLeft <= 0) {
+          if (window.opener || window.parent !== window) {
+            window.close();
+          } else {
+            window.location.href = 'https://upword.co.uk';
+          }
+          clearInterval(closeTimer);
+        }
+      }, 1000);
     }
 
-    function getLevelText(score) {
-      if (score <= 2) {
-        return "🟡 <strong>Niveau débutant</strong> – Pas d'inquiétude, chaque expert a commencé un jour ! On est là pour vous accompagner, étape par étape.";
-      } else if (score <= 4) {
-        return "🟠 <strong>Niveau intermédiaire</strong> – De bonnes bases ! Avec un peu de pratique, vous allez vraiment décoller 🚀.";
-      } else {
-        return "🟢 <strong>Niveau avancé</strong> – Bravo ! Vous avez un excellent niveau. Il est temps de passer à la vitesse supérieure 💪.";
+    // Déterminer le niveau selon le score
+    function getLevel(percentage) {
+      if (percentage >= 90) return 'Avancé+';
+      if (percentage >= 80) return 'Avancé';
+      if (percentage >= 70) return 'Intermédiaire+';
+      if (percentage >= 60) return 'Intermédiaire';
+      if (percentage >= 50) return 'Pre-intermédiaire';
+      return 'Débutant';
+    }
+
+    // Générer le PDF des résultats
+    function generatePDF(data, responses) {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      // Configuration des couleurs
+      const primaryColor = [44, 62, 80]; // 
+#2c3e50
+      const secondaryColor = [52, 152, 219]; // 
+#3498db
+      const successColor = [39, 174, 96]; // 
+#27ae60
+
+      // Header
+      doc.setFillColor(...primaryColor);
+      doc.rect(0, 0, 210, 40, 'F');
+
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(24);
+      doc.setFont('helvetica', 'bold');
+      doc.text('🇬🇧 RÉSULTATS TEST D\'ANGLAIS', 20, 25);
+
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'normal');
+      doc.text('UPword - Formation professionnelle en anglais', 20, 32);
+
+      // Informations personnelles
+      doc.setTextColor(0, 0, 0);
+      doc.setFontSize(16);
+      doc.setFont('helvetica', 'bold');
+      doc.text('INFORMATIONS PERSONNELLES', 20, 55);
+
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'normal');
+      doc.text(Nom : ${data.prenom} ${data.nom}, 20, 70);
+      doc.text(Email : ${data.email}, 20, 80);
+      doc.text(Entreprise : ${data.entreprise}, 20, 90);
+      doc.text(Poste : ${data.poste}, 20, 100);
+      doc.text(Date du test : ${new Date().toLocaleDateString('fr-FR')}, 20, 110);
+
+      // Résultats - Boîte colorée
+      const scoreColor = data.percentage >= 80 ? successColor : data.percentage >= 60 ? [243, 156, 18] : [231, 76, 60];
+      doc.setFillColor(...scoreColor);
+      doc.roundedRect(20, 120, 170, 40, 5, 5, 'F');
+
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(18);
+      doc.setFont('helvetica', 'bold');
+      doc.text('RÉSULTATS', 25, 135);
+
+      doc.setFontSize(14);
+      doc.text(Score : ${data.score}/10 (${data.percentage}%), 25, 145);
+      doc.text(Niveau évalué : ${data.level}, 25, 155);
+
+      // Échelle de niveaux
+      doc.setTextColor(0, 0, 0);
+      doc.setFontSize(14);
+      doc.setFont('helvetica', 'bold');
+      doc.text('ÉCHELLE D\'ÉVALUATION', 20, 180);
+
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      const levels = [
+        '90-100% : Avancé+ - Maîtrise excellente, communication fluide',
+        '80-89% : Avancé - Très bon niveau, autonomie complète',
+        '70-79% : Intermédiaire+ - Bon niveau, quelques lacunes mineures',
+        '60-69% : Intermédiaire - Niveau correct, formation recommandée',
+        '50-59% : Pré-intermédiaire - Bases solides, formation nécessaire',
+        '0-49% : Débutant - Formation intensive recommandée'
+      ];
+
+      levels.forEach((level, index) => {
+        doc.text(level, 25, 190 + (index * 8));
+      });
+
+      // Détail des réponses
+      doc.setFontSize(14);
+      doc.setFont('helvetica', 'bold');
+      doc.text('DÉTAIL DES RÉPONSES', 20, 250);
+
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      responses.forEach((response, index) => {
+        if (250 + (index * 6) > 280) {
+          doc.addPage();
+          doc.text(response, 20, 20 + ((index - 5) * 6));
+        } else {
+          doc.text(response, 25, 260 + (index * 6));
+        }
+      });
+
+      // Footer
+      const pageCount = doc.internal.getNumberOfPages();
+      for (let i = 1; i <= pageCount; i++) {
+        doc.setPage(i);
+        doc.setFontSize(8);
+        doc.setTextColor(128, 128, 128);
+        doc.text('UPword - www.upword.co.uk - contact@upword.co.uk', 20, 290);
+        doc.text(Page ${i}/${pageCount}, 180, 290);
       }
-    }
-  </script>
 
+      return doc;
+    }
+
+    // Soumission du formulaire
+    document.getElementById('englishTest').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const formData = new FormData(this);
+      const score = calculateScore();
+      const percentage = Math.round((score / 10) * 100);
+      const level = getLevel(percentage);
+
+      const data = {
+        prenom: formData.get('prenom'),
+        nom: formData.get('nom'),
+        email: formData.get('email'),
+        entreprise: formData.get('entreprise') || 'Non spécifié',
+        poste: formData.get('poste') || 'Non spécifié',
+        score: score,
+        percentage: percentage,
+        level: level
+      };
+
+      // Construire les détails des réponses
+      const responses = [];
+      const questions = [
+        'She __ to the gym every morning.',
+        'If I __ you, I would accept the job offer.',
+        'The meeting has been __ until next week.',
+        'He\'s been working here __ five years.',
+        'The project must be completed __ the end of the month.',
+        'What does "to break the ice" mean?',
+        'Choose the correct sentence:',
+        'The report needs to be __ before tomorrow\'s presentation.',
+        '___ the weather is bad, we\'ll still have the outdoor event.',
+        'In a business context, "to touch base" means:'
+      ];
+
+      const correctAnswers = ['b', 'c', 'a', 'b', 'b', 'b', 'b', 'a', 'b', 'b'];
+
+      for (let i = 1; i <= 10; i++) {
+        const selected = document.querySelector(input[name="q${i}"]:checked);
+        const isCorrect = selected && selected.value === correctAnswers[i-1];
+        responses.push(Q${i}: ${questions[i-1]} - Réponse: ${selected ? selected.value : 'Non répondu'} ${isCorrect ? '✓' : '✗'});
+      }
+
+      try {
+        // Générer et télécharger le PDF
+        const pdf = generatePDF(data, responses);
+        pdf.save(Test_Anglais_${data.prenom}_${data.nom}_${new Date().toISOString().split('T')[0]}.pdf);
+
+        // Mettre à jour le message de confirmation
+        document.getElementById('result').innerHTML = 
+          <h2>Test complété avec succès ! 🎉</h2>
+          <p><strong>Score obtenu : ${data.score}/10 (${data.percentage}%)</strong></p>
+          <p><strong>Niveau évalué : ${data.level}</strong></p>
+          <div style="background: rgba(255,255,255,0.2); padding: 20px; border-radius: 10px; margin: 20px 0;">
+            <p>📄 <strong>Votre rapport PDF a été généré et téléchargé.</strong></p>
+            <p>📧 <strong>Veuillez l'envoyer à : contact@upword.co.uk</strong></p>
+            <p>💼 L'équipe UPword vous contactera pour discuter de vos besoins en formation.</p>
+          </div>
+          <button class="close-btn" onclick="window.close()" title="Fermer">×</button>
+          <div style="margin-top: 20px;">
+            <small>Cette fenêtre se fermera automatiquement dans <span id="closeCountdown">15</span> secondes</small>
+          </div>
+        ;
+
+      } catch (error) {
+        console.error('Erreur lors de la génération du PDF:', error);
+        // Fallback vers email si le PDF échoue
+        const emailBody = `Nouveau test d'anglais complété:
+
+INFORMATIONS PERSONNELLES:
+Nom: ${data.prenom} ${data.nom}
+Email: ${data.email}
+Entreprise: ${data.entreprise}
+Poste: ${data.poste}
+
+RÉSULTATS:
+Score: ${data.score}/10 (${data.percentage}%)
+Niveau évalué: ${data.level}
+
+DÉTAILS DES RÉPONSES:
+${responses.join('\n')}
+
+Date du test: ${new Date().toLocaleDateString('fr-FR')} à ${new Date().toLocaleTimeString('fr-FR')}`;
+
+        window.location.href = mailto:contact@upword.co.uk?subject=Test d'anglais - ${data.prenom} ${data.nom} (${data.level})&body=${encodeURIComponent(emailBody)};
+      }
+
+      // Afficher le message de confirmation
+      document.getElementById('englishTest').style.display = 'none';
+      document.getElementById('result').classList.remove('hidden');
+
+      // Modifier le timer pour 15 secondes
+      let timeLeft = 15;
+      closeTimer = setInterval(function() {
+        timeLeft--;
+        const countdownSpan = document.getElementById('closeCountdown');
+        if (countdownSpan) {
+          countdownSpan.textContent = timeLeft;
+        }
+
+        if (timeLeft <= 0) {
+          if (window.opener || window.parent !== window) {
+            window.close();
+          } else {
+            window.location.href = 'https://upword.co.uk';
+          }
+          clearInterval(closeTimer);
+        }
+      }, 1000);
+    });
+
+    // Nettoyer avant fermeture
+    window.addEventListener('beforeunload', function() {
+      if (closeTimer) {
+        clearInterval(closeTimer);
+      }
+    });
+  </script>
 </body>
 </html>
