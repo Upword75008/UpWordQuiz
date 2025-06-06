@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Vocabulary Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .header-section {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #023762;
+            padding: 20px;
+            text-align: center;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-section h1 {
+            color: white;
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 120px 20px 20px 20px;
+        }
+
+        .quiz-container {
+            background: #8dc63f;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: #023762;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .question-card {
+            background: #cde2ef;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            border-left: 5px solid #023762;
+        }
+
+        .question {
+            font-size: 1.3em;
+            margin-bottom: 25px;
+            color: #023762;
+            font-weight: 600;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .option {
+            background: #fff;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .option.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .option.correct {
+            background: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+
+        .option.incorrect {
+            background: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+
+        .next-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .next-btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .next-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .score {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            color: #023762;
+            font-weight: 600;
+        }
+
+        .progress {
+            background: #e1e5e9;
+            border-radius: 10px;
+            height: 8px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: #667eea;
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .final-score {
+            font-size: 1.5em;
+            color: #28a745;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .restart-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .restart-btn:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="header-section">
+        <h1>Up Word</h1>
+    </div>
+    
+    <div class="quiz-container">
+        <p class="subtitle">Match words with their corresponding professions</p>
+        
+        <div class="progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <div class="score" id="scoreDisplay">Score: 0/0</div>
+        
+        <div id="quizContent">
+            <div class="question-card">
+                <div class="question" id="questionText"></div>
+                <div class="options" id="optionsContainer"></div>
+                <button class="next-btn" id="nextBtn" onclick="nextQuestion()" disabled>Next Question</button>
+            </div>
+        </div>
+        
+        <div style="margin-top: 30px; text-align: center; color: #333; font-size: 1.1em;">
+            <p>Envie de booster votre score ?</p>
+            <p>"Rendez-vous sur notre site et découvrez nos formations" : <a href="https://upword.co.uk" target="_blank" style="color: #023762; text-decoration: underline;">upword.co.uk</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Set random background color
+        const colors = ['#8dc63f', '#023762'];
+        const randomColor = colors[Math.floor(Math.random() * colors.length)];
+        document.body.style.background = `linear-gradient(135deg, ${randomColor} 0%, ${randomColor}dd 100%)`;
+
+        const questions = [
+            {
+                question: "What tool is most associated with a carpenter?",
+                options: ["Stethoscope", "Hammer", "Calculator", "Paintbrush"],
+                correct: 1,
+                job: "Carpenter"
+            },
+            {
+                question: "Which item would a chef most likely use?",
+                options: ["Screwdriver", "Whisk", "Microscope", "Gavel"],
+                correct: 1,
+                job: "Chef"
+            },
+            {
+                question: "What is essential for a photographer?",
+                options: ["Camera", "Thermometer", "Ruler", "Scissors"],
+                correct: 0,
+                job: "Photographer"
+            },
+            {
+                question: "Which profession uses a stethoscope?",
+                options: ["Teacher", "Mechanic", "Doctor", "Pilot"],
+                correct: 2,
+                job: "Doctor"
+            },
+            {
+                question: "What does a cashier work with daily?",
+                options: ["Paint", "Credit cards", "Plants", "Books"],
+                correct: 1,
+                job: "Cashier"
+            },
+            {
+                question: "Which tool is used by a mechanic?",
+                options: ["Paintbrush", "Wrench", "Violin", "Telescope"],
+                correct: 1,
+                job: "Mechanic"
+            },
+            {
+                question: "What would a teacher most likely use?",
+                options: ["Drill", "Whiteboard", "Scalpel", "Wrench"],
+                correct: 1,
+                job: "Teacher"
+            },
+            {
+                question: "Which profession works with a gavel?",
+                options: ["Judge", "Baker", "Nurse", "Farmer"],
+                correct: 0,
+                job: "Judge"
+            },
+            {
+                question: "What does a firefighter use to fight fires?",
+                options: ["Keyboard", "Hose", "Paintbrush", "Calculator"],
+                correct: 1,
+                job: "Firefighter"
+            },
+            {
+                question: "Which item is essential for a pilot?",
+                options: ["Hammer", "Spatula", "Flight controls", "Pen"],
+                correct: 2,
+                job: "Pilot"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let selectedAnswer = null;
+
+        function loadQuestion() {
+            const question = questions[currentQuestion];
+            document.getElementById('questionText').textContent = question.question;
+            
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = option;
+                optionDiv.onclick = () => selectAnswer(index, optionDiv);
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            document.getElementById('nextBtn').disabled = true;
+            selectedAnswer = null;
+            updateProgress();
+            updateScore();
+        }
+
+        function selectAnswer(answerIndex, optionElement) {
+            // Remove previous selections
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Mark selected answer
+            optionElement.classList.add('selected');
+            selectedAnswer = answerIndex;
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function nextQuestion() {
+            const question = questions[currentQuestion];
+            const options = document.querySelectorAll('.option');
+            
+            // Show correct/incorrect answers
+            options.forEach((option, index) => {
+                if (index === question.correct) {
+                    option.classList.add('correct');
+                } else if (index === selectedAnswer && index !== question.correct) {
+                    option.classList.add('incorrect');
+                }
+                option.onclick = null; // Disable clicking
+            });
+            
+            // Update score
+            if (selectedAnswer === question.correct) {
+                score++;
+            }
+            
+            setTimeout(() => {
+                currentQuestion++;
+                if (currentQuestion < questions.length) {
+                    loadQuestion();
+                } else {
+                    showFinalScore();
+                }
+            }, 1500);
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion) / questions.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function updateScore() {
+            document.getElementById('scoreDisplay').textContent = `Score: ${score}/${currentQuestion}`;
+        }
+
+        function showFinalScore() {
+            const percentage = Math.round((score / questions.length) * 100);
+            let message = '';
+            
+            if (percentage >= 90) {
+                message = '🎉 Excellent! You\'re a vocabulary expert!';
+            } else if (percentage >= 70) {
+                message = '👍 Great job! You know your professions well!';
+            } else if (percentage >= 50) {
+                message = '👌 Good effort! Keep practicing!';
+            } else {
+                message = '📚 Keep studying! You\'ll improve with practice!';
+            }
+            
+            document.getElementById('quizContent').innerHTML = `
+                <div class="question-card">
+                    <div class="final-score">Final Score: ${score}/${questions.length} (${percentage}%)</div>
+                    <p style="font-size: 1.2em; margin-bottom: 20px;">${message}</p>
+                    <button class="restart-btn" onclick="restartQuiz()">Try Again</button>
+                </div>
+            `;
+            
+            updateProgress();
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            selectedAnswer = null;
+            
+            document.getElementById('quizContent').innerHTML = `
+                <div class="question-card">
+                    <div class="question" id="questionText"></div>
+                    <div class="options" id="optionsContainer"></div>
+                    <button class="next-btn" id="nextBtn" onclick="nextQuestion()" disabled>Next Question</button>
+                </div>
+            `;
+            
+            loadQuestion();
+        }
+
+        // Initialize the quiz
+        loadQuestion();
+    </script>
+</body>
+</html>
