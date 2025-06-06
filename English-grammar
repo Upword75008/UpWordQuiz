@@ -1,415 +1,54 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Find the Right Grammar Quiz</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 20px;
-      color: #000;
-      background: linear-gradient(135deg, #8dc63f 0%, #a8d658 100%);
-      min-height: 100vh;
-      transition: all 0.3s ease-in-out;
-    }
-    
-    .dark-theme { 
-      background: linear-gradient(135deg, #023762 0%, #034a7b 100%);
-      color: #fff; 
-    }
-    
-    .quiz-container {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      border-radius: 20px;
-      padding: 30px;
-      max-width: 800px;
-      margin: auto;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-    
-    .dark-theme .quiz-container {
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    
-    h1 {
-      text-align: center;
-      margin-bottom: 40px;
-      font-size: 2.5rem;
-      color: white;
-      font-weight: 700;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    }
-    
-    .subtitle {
-      text-align: center;
-      margin-bottom: 30px;
-      font-style: italic;
-      color: #666;
-      font-size: 1.1rem;
-    }
-    
-    .dark-theme .subtitle {
-      color: #ccc;
-    }
-    
-    .question {
-      margin-bottom: 30px;
-      padding: 20px;
-      background: rgba(255, 255, 255, 0.6);
-      border-radius: 15px;
-      border-left: 5px solid #8dc63f;
-      transition: transform 0.2s ease;
-    }
-    
-    .dark-theme .question {
-      background: rgba(255, 255, 255, 0.1);
-      border-left-color: #8dc63f;
-    }
-    
-    .question:hover {
-      transform: translateY(-2px);
-    }
-    
-    .question p {
-      font-weight: 600;
-      margin-bottom: 15px;
-      font-size: 1.1rem;
-    }
-    
-    .answers label {
-      display: block;
-      margin-bottom: 12px;
-      padding: 12px 15px;
-      cursor: pointer;
-      border-radius: 10px;
-      transition: all 0.2s ease;
-      background: rgba(255, 255, 255, 0.5);
-      border: 2px solid transparent;
-    }
-    
-    .dark-theme .answers label {
-      background: rgba(255, 255, 255, 0.1);
-    }
-    
-    .answers label:hover {
-      background: rgba(141, 198, 63, 0.2);
-      border-color: #8dc63f;
-      transform: translateX(5px);
-    }
-    
-    .answers input[type="radio"] {
-      margin-right: 10px;
-      transform: scale(1.2);
-    }
-    
-    .result {
-      font-weight: bold;
-      margin-top: 30px;
-      padding: 20px;
-      border-radius: 15px;
-      text-align: center;
-      font-size: 1.2rem;
-    }
-    
-    .correct { 
-      color: #28a745; 
-      font-weight: bold; 
-    }
-    
-    .wrong { 
-      color: #dc3545; 
-      font-weight: bold; 
-    }
-    
-    button {
-      display: block;
-      margin: 30px auto;
-      padding: 15px 40px;
-      border: none;
-      background: linear-gradient(45deg, #023762, #034a7b);
-      color: #fff;
-      border-radius: 50px;
-      cursor: pointer;
-      font-size: 1.1rem;
-      font-weight: 600;
-      transition: all 0.3s ease;
-      box-shadow: 0 10px 20px rgba(2, 55, 98, 0.3);
-    }
-    
-    button:hover {
-      background: linear-gradient(45deg, #034a7b, #023762);
-      transform: translateY(-3px);
-      box-shadow: 0 15px 30px rgba(2, 55, 98, 0.4);
-    }
-    
-    button:active {
-      transform: translateY(0);
-    }
-    
-    footer {
-      margin-top: 40px;
-      text-align: center;
-      font-size: 1rem;
-      padding: 20px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 15px;
-      backdrop-filter: blur(5px);
-    }
-    
-    footer a {
-      color: #023762;
-      text-decoration: none;
-      font-weight: 600;
-      transition: color 0.2s ease;
-    }
-    
-    .dark-theme footer a {
-      color: #8dc63f;
-    }
-    
-    footer a:hover {
-      color: #8dc63f;
-    }
-    
-    .answer-feedback {
-      margin-top: 10px;
-      font-style: italic;
-      padding: 10px;
-      border-radius: 8px;
-      font-weight: 500;
-    }
-    
-    .progress-bar {
-      width: 100%;
-      height: 6px;
-      background: rgba(255, 255, 255, 0.3);
-      border-radius: 3px;
-      margin-bottom: 30px;
-      overflow: hidden;
-    }
-    
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #8dc63f, #a8d658);
-      width: 0%;
-      transition: width 0.5s ease;
-      border-radius: 3px;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .question {
-      animation: fadeIn 0.6s ease forwards;
-    }
-  </style>
-</head>
-<body>
-  <script>
-    // Thème aléatoire
-    if (Math.random() < 0.5) {
-      document.body.classList.add('dark-theme');
-    }
-  </script>
-
-  <div class="quiz-container">
-    <h1>Up Word</h1>
-    <p class="subtitle">Common Grammar Mistakes Quiz</p>
-    
-    <div class="progress-bar">
-      <div class="progress-fill" id="progressBar"></div>
-    </div>
-
-    <form id="quizForm">
-      <!-- Question 1 -->
-      <div class="question">
-        <p>1. Which sentence is correct?</p>
-        <div class="answers">
-          <label><input type="radio" name="q1" value="a" /> a) I have went to the store yesterday.</label>
-          <label><input type="radio" name="q1" value="b" /> b) I went to the store yesterday.</label>
-          <label><input type="radio" name="q1" value="c" /> c) I have been went to the store yesterday.</label>
-        </div>
-        <div class="answer-feedback" id="feedback1"></div>
-      </div>
-
-      <!-- Question 2 -->
-      <div class="question">
-        <p>2. Choose the correct form:</p>
-        <div class="answers">
-          <label><input type="radio" name="q2" value="a" /> a) There is three books on the table.</label>
-          <label><input type="radio" name="q2" value="b" /> b) There are three books on the table.</label>
-          <label><input type="radio" name="q2" value="c" /> c) There be three books on the table.</label>
-        </div>
-        <div class="answer-feedback" id="feedback2"></div>
-      </div>
-
-      <!-- Question 3 -->
-      <div class="question">
-        <p>3. Which is grammatically correct?</p>
-        <div class="answers">
-          <label><input type="radio" name="q3" value="a" /> a) Me and my friend are going to the cinema.</label>
-          <label><input type="radio" name="q3" value="b" /> b) My friend and I are going to the cinema.</label>
-          <label><input type="radio" name="q3" value="c" /> c) My friend and me are going to the cinema.</label>
-        </div>
-        <div class="answer-feedback" id="feedback3"></div>
-      </div>
-
-      <!-- Question 4 -->
-      <div class="question">
-        <p>4. Select the correct sentence:</p>
-        <div class="answers">
-          <label><input type="radio" name="q4" value="a" /> a) I could of helped you with that.</label>
-          <label><input type="radio" name="q4" value="b" /> b) I could have helped you with that.</label>
-          <label><input type="radio" name="q4" value="c" /> c) I could off helped you with that.</label>
-        </div>
-        <div class="answer-feedback" id="feedback4"></div>
-      </div>
-
-      <!-- Question 5 -->
-      <div class="question">
-        <p>5. Which sentence uses the apostrophe correctly?</p>
-        <div class="answers">
-          <label><input type="radio" name="q5" value="a" /> a) The cat's are sleeping in their bed's.</label>
-          <label><input type="radio" name="q5" value="b" /> b) The cats are sleeping in their beds.</label>
-          <label><input type="radio" name="q5" value="c" /> c) The cats' are sleeping in they're beds.</label>
-        </div>
-        <div class="answer-feedback" id="feedback5"></div>
-      </div>
-
-      <!-- Question 6 -->
-      <div class="question">
-        <p>6. Choose the correct comparative form:</p>
-        <div class="answers">
-          <label><input type="radio" name="q6" value="a" /> a) This book is more better than that one.</label>
-          <label><input type="radio" name="q6" value="b" /> b) This book is better than that one.</label>
-          <label><input type="radio" name="q6" value="c" /> c) This book is more good than that one.</label>
-        </div>
-        <div class="answer-feedback" id="feedback6"></div>
-      </div>
-
-      <!-- Question 7 -->
-      <div class="question">
-        <p>7. Which sentence is correct?</p>
-        <div class="answers">
-          <label><input type="radio" name="q7" value="a" /> a) Each of the students have their own book.</label>
-          <label><input type="radio" name="q7" value="b" /> b) Each of the students has their own book.</label>
-          <label><input type="radio" name="q7" value="c" /> c) Each of the students have his own book.</label>
-        </div>
-        <div class="answer-feedback" id="feedback7"></div>
-      </div>
-
-      <!-- Question 8 -->
-      <div class="question">
-        <p>8. Select the proper sentence:</p>
-        <div class="answers">
-          <label><input type="radio" name="q8" value="a" /> a) Who's bag is this?</label>
-          <label><input type="radio" name="q8" value="b" /> b) Whose bag is this?</label>
-          <label><input type="radio" name="q8" value="c" /> c) Who's bag this is?</label>
-        </div>
-        <div class="answer-feedback" id="feedback8"></div>
-      </div>
-
-      <button type="button" onclick="checkAnswers()">Valider le quiz</button>
+<button type="button" onclick="checkAnswers()">Submit</button>
     </form>
 
-    <div class="result" id="score"></div>
+    <div class="result" id="result"></div>
   </div>
 
   <footer>
-    🚀 Envie de booster votre score ? Rendez-vous sur notre site et découvrez nos formations : 
-    <a href="https://upword.co.uk" target="_blank">upword.co.uk</a>
+    <p>Made with ❤️ by <a href="https://upword.co.uk" target="_blank">Up Word</a></p>
   </footer>
 
   <script>
     const correctAnswers = {
-      q1: 'b', // Past simple vs present perfect
-      q2: 'b', // Subject-verb agreement with "there are"
-      q3: 'b', // Correct pronoun order "my friend and I"
-      q4: 'b', // "could have" not "could of"
-      q5: 'b', // Correct apostrophe usage
-      q6: 'b', // Comparative form "better" not "more better"
-      q7: 'b', // "Each" is singular but uses plural pronoun "their"
-      q8: 'b'  // "Whose" (possessive) vs "Who's" (who is)
+      q1: 'b',
+      q2: 'b',
+      q3: 'b',
+      q4: 'b',
+      q5: 'b'
     };
-
-    const feedbackText = {
-      q1: "Use simple past 'went' for completed actions in the past.",
-      q2: "'There are' is used with plural nouns like 'books'.",
-      q3: "Use 'My friend and I' as the subject of the sentence.",
-      q4: "'Could have' is correct - 'could of' is a common mistake.",
-      q5: "No apostrophes needed for simple plurals 'cats' and 'beds'.",
-      q6: "'Better' is already comparative - don't add 'more'.",
-      q7: "'Each' takes singular verb 'has' but plural pronoun 'their'.",
-      q8: "'Whose' shows possession - 'Who's' means 'who is'."
-    };
-
-    function updateProgress() {
-      const total = Object.keys(correctAnswers).length;
-      const answered = document.querySelectorAll('input[type="radio"]:checked').length;
-      const percentage = (answered / total) * 100;
-      document.getElementById('progressBar').style.width = percentage + '%';
-    }
-
-    // Add event listeners to all radio buttons
-    document.querySelectorAll('input[type="radio"]').forEach(radio => {
-      radio.addEventListener('change', updateProgress);
-    });
 
     function checkAnswers() {
       let score = 0;
-      let total = Object.keys(correctAnswers).length;
+      const total = Object.keys(correctAnswers).length;
 
-      for (let key in correctAnswers) {
-        const selected = document.querySelector(`input[name="${key}"]:checked`);
-        const feedback = document.getElementById("feedback" + key.substring(1));
+      for (let i = 1; i <= total; i++) {
+        const question = 'q' + i;
+        const feedback = document.getElementById('feedback' + i);
+        const radios = document.getElementsByName(question);
+        let userAnswer = '';
 
-        if (!selected) {
-          feedback.textContent = "❌ Aucune réponse sélectionnée.";
-          feedback.className = 'wrong answer-feedback';
-          continue;
-        }
+        radios.forEach(radio => {
+          if (radio.checked) {
+            userAnswer = radio.value;
+          }
+        });
 
-        if (selected.value === correctAnswers[key]) {
-          feedback.textContent = "✅ " + feedbackText[key];
-          feedback.className = 'correct answer-feedback';
+        if (userAnswer === correctAnswers[question]) {
           score++;
+          feedback.textContent = 'Correct!';
+          feedback.className = 'answer-feedback correct';
         } else {
-          feedback.textContent = "❌ " + feedbackText[key];
-          feedback.className = 'wrong answer-feedback';
+          feedback.textContent = 'Wrong!';
+          feedback.className = 'answer-feedback wrong';
         }
       }
 
-      // Affichage du score avec animation
-      const scoreDiv = document.getElementById("score");
-      let comment = "";
-      let bgColor = "";
-      
-      if (score === total) {
-        comment = "🎉 Parfait ! Vous maîtrisez ces erreurs courantes !";
-        bgColor = "rgba(40, 167, 69, 0.1)";
-      } else if (score >= total * 0.75) {
-        comment = "🌟 Très bien ! Encore quelques efforts et c'est parfait !";
-        bgColor = "rgba(255, 193, 7, 0.1)";
-      } else if (score >= total * 0.5) {
-        comment = "👍 Bon travail ! Continuez à vous entraîner !";
-        bgColor = "rgba(23, 162, 184, 0.1)";
-      } else {
-        comment = "📚 Continuez à pratiquer - vous progressez !";
-        bgColor = "rgba(220, 53, 69, 0.1)";
-      }
-      
-      scoreDiv.style.backgroundColor = bgColor;
-      scoreDiv.innerHTML = `<strong>Score : ${score}/${total}</strong><br>${comment}`;
-      
-      // Scroll vers les résultats
-      scoreDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document.getElementById('result').innerHTML = `You scored ${score} out of ${total}.`;
+      updateProgressBar(score / total * 100);
+    }
+
+    function updateProgressBar(percentage) {
+      document.getElementById('progressBar').style.width = percentage + '%';
     }
   </script>
 </body>
