@@ -231,13 +231,6 @@
       margin-bottom: 15px;
     }
 
-    .level-description {
-      background: rgba(255,255,255,0.15);
-      padding: 20px;
-      border-radius: 10px;
-      margin: 20px 0;
-    }
-
     .restart-btn {
       background: rgba(255,255,255,0.2);
       border: 2px solid white;
@@ -320,7 +313,7 @@
   <div class="container">
     <div class="header">
       <h1>🇬🇧 Test d'Anglais UPword</h1>
-      <p>Évaluez votre niveau d'anglais en quelques minutes</p>
+      <p>Évaluez vos connaissances en anglais en quelques minutes</p>
     </div>
 
     <div class="content">
@@ -522,19 +515,6 @@
       q10: { answer: 'b', explanation: '"Touch base" est une expression business qui signifie prendre contact brièvement.' }
     };
 
-    // Fonction pour déterminer le niveau
-    function getLevel(percentage) {
-      if (percentage >= 90) {
-        return { level: "Excellent (C1-C2)", description: "Votre niveau d'anglais est avancé. Vous maîtrisez les structures complexes et le vocabulaire professionnel." };
-      } else if (percentage >= 70) {
-        return { level: "Bon (B2)", description: "Votre niveau d'anglais est intermédiaire-avancé. Quelques points à améliorer pour atteindre l'excellence." };
-      } else if (percentage >= 50) {
-        return { level: "Moyen (B1)", description: "Votre niveau d'anglais est intermédiaire. Il y a encore du travail pour consolider vos bases." };
-      } else {
-        return { level: "Débutant (A1-A2)", description: "Votre niveau d'anglais nécessite des bases solides. Une formation structurée vous aiderait beaucoup." };
-      }
-    }
-
     // Calculer le score
     function calculateScore() {
       let score = 0;
@@ -622,7 +602,6 @@
       
       const { score, userAnswers } = calculateScore();
       const percentage = Math.round((score / 10) * 100);
-      const levelInfo = getLevel(percentage);
       
       // Afficher les corrections
       showCorrections(userAnswers);
@@ -647,16 +626,10 @@
             <p style="font-size: 2em; font-weight: bold; margin: 10px 0;">${score}/10 (${percentage}%)</p>
           </div>
           
-          <div class="level-description">
-            <h3>🎓 Niveau évalué</h3>
-            <p style="font-size: 1.4em; font-weight: bold;">${levelInfo.level}</p>
-            <p>${levelInfo.description}</p>
-          </div>
-          
           <div style="margin-top: 30px;">
             <p>📚 <strong>Les corrections détaillées avec explications sont affichées ci-dessus</strong></p>
             <p>🔍 Chaque question montre votre réponse, la bonne réponse et une explication</p>
-            <p>💼 Pour une formation personnalisée adaptée à votre niveau, découvrez Up Word !</p>
+            <p>💼 Pour une formation personnalisée, découvrez Up Word !</p>
           </div>
           
           <button class="restart-btn" onclick="restartTest()">🔄 Refaire le test</button>
