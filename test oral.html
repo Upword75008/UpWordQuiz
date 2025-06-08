@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Test d'Anglais - UPword</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 20px;
+      margin: 0;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      overflow: hidden;
+      animation: fadeIn 0.8s ease-out;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* En-tête amélioré */
+    .header {
+      background: linear-gradient(135deg, #1e3a8a, #1e40af);
+      color: white;
+      padding: 40px 30px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="1.5" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="70" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="70" cy="10" r="2.5" fill="rgba(255,255,255,0.1)"/><circle cx="10" cy="60" r="1.8" fill="rgba(255,255,255,0.1)"/></svg>');
+      animation: float 20s infinite linear;
+    }
+    
+    @keyframes float {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+    
+    .header h1 {
+      margin: 0;
+      font-size: 2.5em;
+      font-weight: 700;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .header .subtitle {
+      font-size: 1.2em;
+      margin-top: 10px;
+      opacity: 0.9;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .header .features {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 25px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .feature {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9em;
+    }
+    
+    .feature-icon {
+      width: 20px;
+      height: 20px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    /* Contenu principal */
+    .content {
+      padding: 40px 30px;
+    }
+    
+    .instruction {
+      background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      border-left: 5px solid #3498db;
+      position: relative;
+    }
+    
+    .instruction::before {
+      content: '🎧';
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 24px;
+    }
+    
+    h2 {
+      color: #2c3e50;
+      margin-top: 0;
+    }
+    
+    .question {
+      margin: 25px 0;
+      padding: 20px;
+      background: #f9f9f9;
+      border-left: 4px solid #3498db;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+    
+    .question:hover {
+      background: #f1f8ff;
+      box-shadow: 0 5px 15px rgba(52, 152, 219, 0.1);
+      transform: translateY(-2px);
+    }
+    
+    label {
+      display: block;
+      margin: 12px 0;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+    
+    label:hover {
+      color: #3498db;
+    }
+    
+    input[type="radio"] {
+      margin-right: 10px;
+      transform: scale(1.2);
+    }
+    
+    button {
+      margin-top: 30px;
+      padding: 18px 40px;
+      background: linear-gradient(45deg, #3498db, #2980b9);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
+    }
+    
+    #result {
+      margin-top: 40px;
+      padding: 30px;
+      background: linear-gradient(45deg, #dff0d8, #c3e6cb);
+      border: 2px solid #28a745;
+      border-radius: 15px;
+      display: none;
+      text-align: center;
+      animation: slideIn 0.5s ease-out;
+    }
+    
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Pied de page amélioré */
+    .footer {
+      background: linear-gradient(135deg, #2c3e50, #34495e);
+      color: white;
+      padding: 40px 30px;
+      text-align: center;
+    }
+    
+    .footer-content {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .footer h3 {
+      margin-top: 0;
+      font-size: 1.8em;
+      margin-bottom: 15px;
+    }
+    
+    .footer p {
+      font-size: 1.1em;
+      margin-bottom: 25px;
+      opacity: 0.9;
+      line-height: 1.6;
+    }
+    
+    .cta-buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+    
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 15px 30px;
+      background: linear-gradient(45deg, #e74c3c, #c0392b);
+      color: white;
+      text-decoration: none;
+      border-radius: 25px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+    }
+    
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+      color: white;
+      text-decoration: none;
+    }
+    
+    .cta-button.secondary {
+      background: linear-gradient(45deg, #27ae60, #229954);
+      box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+    }
+    
+    .cta-button.secondary:hover {
+      box-shadow: 0 8px 25px rgba(39, 174, 96, 0.4);
+    }
+    
+    .contact-info {
+      margin-top: 30px;
+      padding-top: 25px;
+      border-top: 1px solid rgba(255,255,255,0.2);
+      font-size: 0.9em;
+      opacity: 0.8;
+    }
+    
+    audio {
+      width: 100%;
+      margin: 25px 0;
+      border-radius: 10px;
+    }
+    
+    @media (max-width: 768px) {
+      .header .features {
+        gap: 15px;
+      }
+      .feature {
+        font-size: 0.8em;
+      }
+      .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+      .container {
+        margin: 10px;
+        border-radius: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- En-tête amélioré -->
+    <div class="header">
+      <h1>🇬🇧 Test d'Anglais UPword</h1>
+      <div class="subtitle">Évaluez votre niveau d'anglais professionnel</div>
+      <div class="features">
+        <div class="feature">
+          <div class="feature-icon">⏱️</div>
+          <span>5 minutes</span>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🎯</div>
+          <span>Niveau précis</span>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🆓</div>
+          <span>100% gratuit</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="instruction">
+        <h2>📋 Instructions</h2>
+        <p>Écoutez attentivement l'enregistrement audio ci-dessous et répondez aux 5 questions suivantes. Chaque question ne possède qu'une seule bonne réponse.</p>
+      </div>
+
+      <audio controls>
+        <source src="https://github.com/Upword75008/UpWordQuiz/raw/main/meeting%20.mp3" type="audio/mpeg">
+        Votre navigateur ne supporte pas l'audio.
+      </audio>
+
+      <form id="quizForm">
+        <div class="question">
+          <label><strong>1. What is the woman's name?</strong></label>
+          <label><input type="radio" name="q1" value="a"> a) Sarah</label>
+          <label><input type="radio" name="q1" value="b"> b) Emma</label>
+          <label><input type="radio" name="q1" value="c"> c) Lisa</label>
+        </div>
+        <div class="question">
+          <label><strong>2. What time does the appointment start?</strong></label>
+          <label><input type="radio" name="q2" value="a"> a) 2:00 PM</label>
+          <label><input type="radio" name="q2" value="b"> b) 2:30 PM</label>
+          <label><input type="radio" name="q2" value="c"> c) 3:00 PM</label>
+        </div>
+        <div class="question">
+          <label><strong>3. What is the main topic of discussion?</strong></label>
+          <label><input type="radio" name="q3" value="a"> a) Business meeting</label>
+          <label><input type="radio" name="q3" value="b"> b) English training</label>
+          <label><input type="radio" name="q3" value="c"> c) Project deadline</label>
+        </div>
+        <div class="question">
+          <label><strong>4. How long will the session last?</strong></label>
+          <label><input type="radio" name="q4" value="a"> a) 30 minutes</label>
+          <label><input type="radio" name="q4" value="b"> b) 45 minutes</label>
+          <label><input type="radio" name="q4" value="c"> c) 1 hour</label>
+        </div>
+        <div class="question">
+          <label><strong>5. What is mentioned about the location?</strong></label>
+          <label><input type="radio" name="q5" value="a"> a) It's in the city center</label>
+          <label><input type="radio" name="q5" value="b"> b) It's online via video call</label>
+          <label><input type="radio" name="q5" value="c"> c) It's at the company office</label>
+        </div>
+
+        <button type="submit">📊 Découvrir mon niveau</button>
+      </form>
+
+      <div id="result">
+        <h2>🎉 Félicitations !</h2>
+        <p id="scoreText"></p>
+        <div style="margin-top: 20px; padding: 15px; background: rgba(52, 152, 219, 0.1); border-radius: 10px;">
+          <p><strong>💡 Conseil :</strong> Quel que soit votre niveau, nos formations personnalisées vous aideront à progresser rapidement !</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pied de page amélioré -->
+    <div class="footer">
+      <div class="footer-content">
+        <h3>🚀 Prêt à améliorer votre anglais ?</h3>
+        <p>Rejoignez des milliers de professionnels qui ont déjà transformé leur carrière grâce à nos formations d'anglais personnalisées. Cours individuels, groupes, préparation aux certifications...</p>
+        
+        <div class="cta-buttons">
+          <a href="https://upword.co.uk" target="_blank" class="cta-button">
+            🌐 Découvrir UPword
+          </a>
+          <a href="https://upword.co.uk/contact" target="_blank" class="cta-button secondary">
+            📞 Consultation gratuite
+          </a>
+        </div>
+        
+        <div class="contact-info">
+          <p>📧 contact@upword.co.uk | 📱 Formation sur mesure | 🎯 Résultats garantis</p>
+          <p>Centre de formation agréé • Formateurs natifs • Méthode immersive</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const correctAnswers = {
+      q1: 'a', // Sarah est maintenant la bonne réponse
+      q2: 'b',
+      q3: 'b',
+      q4: 'c',
+      q5: 'b'
+    };
+
+    // Réponses correctes avec explications
+    const explanations = {
+      q1: "La femme se présente comme Sarah au début de la conversation.",
+      q2: "L'heure mentionnée est 2:30 PM (14h30) pour le rendez-vous.",
+      q3: "Le sujet principal discuté est la formation en anglais (English training).",
+      q4: "La durée prévue de la session est d'1 heure complète.",
+      q5: "Il est précisé que la rencontre se fera en ligne via un appel vidéo."
+    };
+
+    document.getElementById('quizForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      let score = 0;
+      let total = 5;
+      
+      // Calculer le score et afficher les corrections
+      for (let key in correctAnswers) {
+        const questionDiv = document.querySelector(`input[name="${key}"]`).closest('.question');
+        const selected = document.querySelector(`input[name="${key}"]:checked`);
+        const allOptions = document.querySelectorAll(`input[name="${key}"]`);
+        
+        // Désactiver toutes les options
+        allOptions.forEach(option => {
+          option.disabled = true;
+          const label = option.closest('label');
+          
+          if (option.value === correctAnswers[key]) {
+            // Marquer la bonne réponse en vert
+            label.style.color = '#27ae60';
+            label.style.fontWeight = 'bold';
+            label.innerHTML = '✅ ' + label.innerHTML;
+          } else if (selected && option === selected) {
+            // Marquer la mauvaise réponse sélectionnée en rouge
+            label.style.color = '#e74c3c';
+            label.style.fontWeight = 'bold';
+            label.innerHTML = '❌ ' + label.innerHTML;
+          }
+        });
+        
+        // Ajouter l'explication
+        const explanation = document.createElement('div');
+        explanation.style.cssText = `
+          margin-top: 15px;
+          padding: 12px;
+          background: #e8f4fd;
+          border-left: 4px solid #3498db;
+          border-radius: 6px;
+          font-style: italic;
+          color: #2c3e50;
+          font-size: 0.9em;
+        `;
+        explanation.innerHTML = `💡 <strong>Explication :</strong> ${explanations[key]}`;
+        questionDiv.appendChild(explanation);
+        
+        if (selected && selected.value === correctAnswers[key]) {
+          score++;
+        }
+      }
+
+      const percent = Math.round((score / total) * 100);
+      let comment = '';
+      let commentColor = '#e74c3c';
+      
+      if (percent >= 80) {
+        comment = 'Excellent travail ! Votre compréhension orale est remarquable.';
+        commentColor = '#27ae60';
+      } else if (percent >= 60) {
+        comment = 'Bien joué ! Vous avez une bonne base en compréhension orale.';
+        commentColor = '#f39c12';
+      } else if (percent >= 40) {
+        comment = 'C\'est un début encourageant ! Continuez vos efforts.';
+        commentColor = '#3498db';
+      } else {
+        comment = 'Ne vous découragez pas, la pratique régulière fera la différence !';
+        commentColor = '#e74c3c';
+      }
+
+      const scoreText = `
+        <div style="font-size: 1.5em; margin-bottom: 20px;">
+          Votre score : <strong>${score}/${total}</strong> (${percent}%)
+        </div>
+        <div style="font-size: 1.2em; color: ${commentColor}; margin-bottom: 15px; font-weight: 600;">
+          ${comment}
+        </div>
+        <div style="font-style: italic; color: #666; line-height: 1.5;">
+          Nos formations personnalisées s'adaptent à votre niveau actuel pour vous faire progresser efficacement. 
+          Contactez-nous pour un bilan gratuit et découvrez comment améliorer rapidement votre anglais professionnel !
+        </div>
+      `;
+      
+      document.getElementById('scoreText').innerHTML = scoreText;
+      document.getElementById('result').style.display = 'block';
+      
+      // Masquer le bouton de soumission
+      document.querySelector('button[type="submit"]').style.display = 'none';
+      
+      // Scroll vers les résultats
+      document.getElementById('result').scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'center' 
+      });
+    });
+
+    // Animation des questions au scroll
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.question').forEach(question => {
+      question.style.opacity = '0';
+      question.style.transform = 'translateY(20px)';
+      question.style.transition = 'all 0.6s ease';
+      observer.observe(question);
+    });
+  </script>
+</body>
+</html>
