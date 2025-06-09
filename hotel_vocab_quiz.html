@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Up Word - Hotel Vocabulary Quiz</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    /* Couleurs de fond aléatoires */
+    .bg-green {
+      background: linear-gradient(135deg, #8dc63f 0%, #6fa829 100%);
+    }
+
+    .bg-blue {
+      background: linear-gradient(135deg, #023762 0%, #034a7a 100%);
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+      overflow: hidden;
+    }
+
+    /* Header Up Word */
+    .header {
+      background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .upword-logo {
+      font-size: 2.8rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+      letter-spacing: 2px;
+    }
+
+    .quiz-title {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+      color: #ecf0f1;
+    }
+
+    .quiz-subtitle {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      color: #bdc3c7;
+    }
+
+    .quiz-container {
+      padding: 30px;
+    }
+
+    .instructions {
+      background: #f8f9fa;
+      padding: 25px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+      border-left: 5px solid #3498db;
+    }
+
+    .instructions h3 {
+      color: #2c3e50;
+      margin-bottom: 15px;
+      font-size: 1.3rem;
+    }
+
+    .instructions ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .instructions li {
+      margin-bottom: 8px;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .instructions li:before {
+      content: "▶";
+      color: #3498db;
+      position: absolute;
+      left: 0;
+    }
+
+    /* Questions sur fond bleu clair */
+    .question-card {
+      background: #cde2e8;
+      border: 2px solid #a8c8d1;
+      border-radius: 12px;
+      padding: 25px;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+      color: #000;
+    }
+
+    .question-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .question-number {
+      color: #2c3e50;
+      font-weight: bold;
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+    }
+
+    .question-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .options-container {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .option {
+      padding: 15px 20px;
+      border: 2px solid #7fb3d3;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: white;
+      font-size: 1rem;
+      color: #2c3e50;
+    }
+
+    .option:hover {
+      border-color: #3498db;
+      background: #e8f4f8;
+    }
+
+    .option.selected {
+      border-color: #3498db;
+      background: #3498db;
+      color: white;
+    }
+
+    .option.correct {
+      border-color: #27ae60;
+      background: #27ae60;
+      color: white;
+    }
+
+    .option.incorrect {
+      border-color: #e74c3c;
+      background: #e74c3c;
+      color: white;
+    }
+
+    .option.disabled {
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    .validate-btn {
+      background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      margin-right: 10px;
+    }
+
+    .validate-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+    }
+
+    .validate-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .validate-all-btn {
+      background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      margin: 30px auto;
+      display: block;
+      box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+    }
+
+    .validate-all-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(39, 174, 96, 0.4);
+    }
+
+    .validate-all-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .results {
+      text-align: center;
+      padding: 40px;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      border-radius: 15px;
+      margin-top: 30px;
+      display: none;
+    }
+
+    .results.show {
+      display: block;
+    }
+
+    .score {
+      font-size: 3rem;
+      font-weight: bold;
+      color: #2c3e50;
+      margin-bottom: 15px;
+    }
+
+    .score-message {
+      font-size: 1.3rem;
+      color: #7f8c8d;
+      margin-bottom: 25px;
+    }
+
+    .restart-btn {
+      background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .restart-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+    }
+
+    .answer-feedback {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 5px;
+      background: #e8f5e8;
+      border-left: 4px solid #27ae60;
+      color: #2c3e50;
+      font-weight: 600;
+      display: none;
+    }
+
+    .answer-feedback.show {
+      display: block;
+    }
+
+    /* DÉBUT DU COMPOSANT FOOTER UPWORD */
+    .upword-footer {
+      background: linear-gradient(135deg, #2c3e50, #34495e);
+      color: white;
+      padding: 40px 30px;
+      text-align: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .upword-footer-content {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .upword-footer h3 {
+      margin-top: 0;
+      font-size: 1.8em;
+      margin-bottom: 15px;
+    }
+
+    .upword-footer p {
+      font-size: 1.1em;
+      margin-bottom: 25px;
+      opacity: 0.9;
+      line-height: 1.6;
+    }
+
+    .upword-cta-buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+
+    .upword-cta-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 15px 30px;
+      background: linear-gradient(45deg, #e74c3c, #c0392b);
+      color: white;
+      text-decoration: none;
+      border-radius: 25px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+    }
+
+    .upword-cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+      color: white;
+      text-decoration: none;
+    }
+
+    .upword-cta-button.secondary {
+      background: linear-gradient(45deg, #27ae60, #229954);
+      box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+    }
+
+    .upword-cta-button.secondary:hover {
+      box-shadow: 0 8px 25px rgba(39, 174, 96, 0.4);
+    }
+
+    .upword-contact-info {
+      margin-top: 30px;
+      padding-top: 25px;
+      border-top: 1px solid rgba(255,255,255,0.2);
+      font-size: 0.9em;
+      opacity: 0.8;
+    }
+
+    @media (max-width: 768px) {
+      .upword-cta-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .upword-footer {
+        padding: 30px 20px;
+      }
+
+      .header {
+        padding: 20px;
+      }
+      
+      .upword-logo {
+        font-size: 2.2rem;
+      }
+      
+      .quiz-container {
+        padding: 20px;
+      }
+      
+      .question-card {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="upword-logo">UP WORD</div>
+      <div class="quiz-title">🏨 Hotel Vocabulary Quiz</div>
+      <div class="quiz-subtitle">Test your knowledge of hotel-related vocabulary</div>
+    </div>
+
+    <div class="quiz-container">
+      <div class="instructions">
+        <h3>📋 Instructions</h3>
+        <ul>
+          <li>Read each question carefully and select your answer</li>
+          <li>Once you've answered all questions, click "Validate Quiz"</li>
+          <li>✅ Correct answers will show green checkmarks</li>
+          <li>❌ Incorrect answers will show red crosses</li>
+          <li>🟦 The correct answer will be displayed for wrong answers</li>
+          <li>Your final score and feedback will appear at the end</li>
+        </ul>
+      </div>
+
+      <div id="questions-container">
+        <!-- Questions will be inserted here -->
+      </div>
+
+      <button class="validate-all-btn" onclick="validateAllAnswers()" id="validate-all-btn" disabled>
+        🔍 Validate Quiz
+      </button>
+
+      <div class="results" id="results">
+        <div class="score" id="final-score">0/10</div>
+        <div class="score-message" id="score-message"></div>
+        <button class="restart-btn" onclick="restartQuiz()">🔄 Restart Quiz</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DÉBUT DU COMPOSANT FOOTER UPWORD - À INTÉGRER -->
+  <div class="upword-footer">
+    <div class="upword-footer-content">
+      <h3>🚀 Prêt à améliorer votre anglais ?</h3>
+      <p>Rejoignez des centaines de professionnels qui ont déjà transformé leur carrière grâce à nos formations d'anglais personnalisées. Cours individuels, groupes, préparation aux certifications...</p>
+      
+      <div class="upword-cta-buttons">
+        <a href="https://upword.co.uk" target="_blank" class="upword-cta-button">
+          🌐 Découvrir UPword
+        </a>
+        <a href="https://upword.co.uk/contact" target="_blank" class="upword-cta-button secondary">
+          📞 Consultation gratuite
+        </a>
+      </div>
+      
+      <div class="upword-contact-info">
+        <p>📧 contact@upword.co.uk | 📱 Formation sur mesure | 🎯 Résultats garantis</p>
+        <p>Centre de formation agréé • Formateurs natifs • Méthode immersive</p>
+      </div>
+    </div>
+  </div>
+  <!-- FIN DU COMPOSANT FOOTER UPWORD -->
+
+  <script>
+    const questions = [
+      {
+        question: "What do you call the person who welcomes guests at a hotel reception?",
+        options: ["The concierge", "The receptionist", "The porter", "The bellboy"],
+        correct: 1
+      },
+      {
+        question: "What is the English term for 'enregistrement' (check-in) at a hotel?",
+        options: ["Registration", "Reservation", "Sign-up", "Arrival"],
+        correct: 0
+      },
+      {
+        question: "Who is responsible for handling guests' luggage?",
+        options: ["The valet", "The porter", "The bellboy", "The doorman"],
+        correct: 1
+      },
+      {
+        question: "What does 'suite' mean in hotel vocabulary?",
+        options: ["A single room", "An apartment with multiple rooms", "A double room", "A room with a balcony"],
+        correct: 1
+      },
+      {
+        question: "What do you call the service that cleans hotel rooms?",
+        options: ["Reception", "Concierge", "Housekeeping", "Catering"],
+        correct: 2
+      },
+      {
+        question: "What is a 'minibar'?",
+        options: ["A small restaurant", "A fridge in the room with drinks and snacks", "A bar in the lobby", "A drink service"],
+        correct: 1
+      },
+      {
+        question: "What does 'room service' mean?",
+        options: ["Cleaning the room", "Delivering food to your room", "Checking the room", "Booking a room"],
+        correct: 1
+      },
+      {
+        question: "What is the 'lobby' of a hotel?",
+        options: ["The restaurant", "The main entrance area", "The elevator", "The parking area"],
+        correct: 1
+      },
+      {
+        question: "What does 'check-out' mean?",
+        options: ["Arriving at the hotel", "Leaving the hotel", "Paying the bill", "Getting room keys"],
+        correct: 1
+      },
+      {
+        question: "What is a 'reservation'?",
+        options: ["A complaint", "A booking in advance", "A room key", "A hotel service"],
+        correct: 1
+      }
+    ];
+
+    let selectedAnswers = [];
+    let isValidated = false;
+
+    function initializeQuiz() {
+      // Couleur de fond aléatoire
+      const backgrounds = ['bg-green', 'bg-blue'];
+      const randomBg = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+      document.body.className = randomBg;
+      
+      displayQuestions();
+    }
+
+    function displayQuestions() {
+      const container = document.getElementById('questions-container');
+      container.innerHTML = '';
+      
+      questions.forEach((q, index) => {
+        const questionCard = document.createElement('div');
+        questionCard.className = 'question-card';
+        questionCard.innerHTML = `
+          <div class="question-number">Question ${index + 1} of ${questions.length}</div>
+          <div class="question-title">${q.question}</div>
+          <div class="options-container" id="options-${index}">
+            ${q.options.map((option, optIndex) => `
+              <div class="option" onclick="selectOption(${index}, ${optIndex})" id="option-${index}-${optIndex}">
+                ${option}
+              </div>
+            `).join('')}
+          </div>
+          <div class="answer-feedback" id="feedback-${index}">
+            ✅ Correct answer: ${q.options[q.correct]}
+          </div>
+        `;
+        container.appendChild(questionCard);
+      });
+    }
+
+    function selectOption(questionIndex, optionIndex) {
+      if (isValidated) return;
+      
+      // Clear previous selections for this question
+      const optionsContainer = document.getElementById(`options-${questionIndex}`);
+      const options = optionsContainer.querySelectorAll('.option');
+      options.forEach(opt => opt.classList.remove('selected'));
+      
+      // Select the clicked option
+      document.getElementById(`option-${questionIndex}-${optionIndex}`).classList.add('selected');
+      
+      // Store the selected answer
+      selectedAnswers[questionIndex] = optionIndex;
+      
+      // Check if all questions are answered
+      checkAllAnswered();
+    }
+
+    function checkAllAnswered() {
+      const allAnswered = selectedAnswers.length === questions.length && 
+                         selectedAnswers.every(answer => answer !== undefined);
+      
+      document.getElementById('validate-all-btn').disabled = !allAnswered;
+    }
+
+    function validateAllAnswers() {
+      if (isValidated) return;
+      
+      isValidated = true;
+      let score = 0;
+      
+      questions.forEach((question, index) => {
+        const selectedOption = selectedAnswers[index];
+        const correctOption = question.correct;
+        const optionsContainer = document.getElementById(`options-${index}`);
+        const options = optionsContainer.querySelectorAll('.option');
+        const feedback = document.getElementById(`feedback-${index}`);
+        
+        // Disable all options
+        options.forEach(opt => opt.classList.add('disabled'));
+        
+        // Show results
+        options.forEach((opt, optIndex) => {
+          if (optIndex === correctOption) {
+            opt.innerHTML = '✅ ' + opt.textContent;
+            opt.classList.add('correct');
+          } else if (optIndex === selectedOption && optIndex !== correctOption) {
+            opt.innerHTML = '❌ ' + opt.textContent;
+            opt.classList.add('incorrect');
+            feedback.classList.add('show');
+          }
+        });
+        
+        // Update score
+        if (selectedOption === correctOption) {
+          score++;
+        }
+      });
+      
+      // Show results
+      setTimeout(() => showResults(score), 1000);
+      
+      // Hide validate button
+      document.getElementById('validate-all-btn').style.display = 'none';
+    }
+
+    function showResults(score) {
+      const results = document.getElementById('results');
+      const finalScore = document.getElementById('final-score');
+      const scoreMessage = document.getElementById('score-message');
+      
+      finalScore.textContent = `You got ${score}/${questions.length}!`;
+      
+      let message = '';
+      
+      if (score >= 9) {
+        message = '🏆 Excellent! You\'re ready for the next challenge!';
+      } else if (score >= 6) {
+        message = '👏 Good job! A few more tries and you\'ll master it.';
+      } else {
+        message = '📚 Keep practicing — you\'re getting there!';
+      }
+      
+      scoreMessage.textContent = message;
+      results.classList.add('show');
+      
+      // Scroll to results
+      results.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function restartQuiz() {
+      selectedAnswers = [];
+      isValidated = false;
+      
+      document.getElementById('results').classList.remove('show');
+      document.getElementById('validate-all-btn').style.display = 'block';
+      document.getElementById('validate-all-btn').disabled = true;
+      
+      // Clear all feedbacks
+      questions.forEach((_, index) => {
+        document.getElementById(`feedback-${index}`).classList.remove('show');
+      });
+      
+      initializeQuiz();
+    }
+
+    // Initialize the quiz when the page loads
+    window.onload = function() {
+      initializeQuiz();
+    };
+  </script>
+</body>
+</html>
