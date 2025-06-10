@@ -3,156 +3,472 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Business English Vocabulary</title>
+    <title>Business English Vocabulary Quiz - UpWord</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #8dc63f;
+            min-height: 100vh;
+        }
+
+        .container {
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #8cd63f;
         }
-        .container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        h1 {
-            color: white;
-            background-color: #023762;
+
+        .header {
+            background: white;
             text-align: center;
+            padding: 30px;
+            border-radius: 15px;
             margin-bottom: 30px;
-            padding: 20px;
-            border-radius: 5px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
         }
-        .instructions {
-            background-color: #e8f4f8;
-            padding: 15px;
-            border-left: 4px solid #2196F3;
-            margin-bottom: 30px;
-        }
-        .question {
-            margin-bottom: 25px;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: #fafafa;
-        }
-        .question-text {
+
+        .upword-logo {
+            font-size: 2.5em;
             font-weight: bold;
-            margin-bottom: 15px;
-            font-size: 16px;
+            color: #023762;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
+
+        .quiz-title {
+            font-size: 1.8em;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .instructions {
+            background: #cde2e8;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 5px solid #023762;
+            color: black;
+        }
+
+        .question-container {
+            background: #cde2e8;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            color: black;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
         .options {
             margin-bottom: 15px;
         }
+
         .option {
-            margin: 8px 0;
-            padding: 8px 0;
-        }
-        .correct-answer {
-            color: #4CAF50;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-        .submit-btn {
-            background-color: #2196F3;
-            color: white;
-            padding: 12px 30px;
-            border: none;
-            border-radius: 5px;
+            margin: 12px 0;
+            padding: 12px;
+            background: rgba(255,255,255,0.7);
+            border-radius: 8px;
+            transition: all 0.3s ease;
             cursor: pointer;
-            font-size: 16px;
-            display: block;
-            margin: 30px auto;
         }
-        .submit-btn:hover {
-            background-color: #1976D2;
+
+        .option:hover {
+            background: rgba(255,255,255,0.9);
+            transform: translateX(5px);
         }
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            padding: 20px;
-            background-color: #f0f0f0;
+
+        .option input[type="radio"] {
+            margin-right: 12px;
+            transform: scale(1.2);
+        }
+
+        .option label {
+            cursor: pointer;
+            font-size: 1.1em;
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 10px;
             border-radius: 5px;
+            display: none;
         }
-        .logo {
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .submit-button {
+            display: block;
+            width: 200px;
+            margin: 40px auto;
+            padding: 15px 30px;
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .submit-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+        }
+
+        .results {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 30px 0;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .results.show {
+            display: block;
+        }
+
+        .score {
+            font-size: 2em;
             font-weight: bold;
             color: #023762;
-            text-align: center;
-            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .comment {
+            font-size: 1.3em;
             margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        /* Footer UpWord */
+        .upword-footer {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            border-radius: 15px;
+            margin-top: 40px;
+        }
+
+        .upword-footer-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .upword-footer h3 {
+            margin-top: 0;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+
+        .upword-footer p {
+            font-size: 1.1em;
+            margin-bottom: 25px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .upword-cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .upword-cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 30px;
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .upword-cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+
+        .upword-cta-button.secondary {
+            background: linear-gradient(45deg, #27ae60, #229954);
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+        }
+
+        .upword-cta-button.secondary:hover {
+            box-shadow: 0 8px 25px rgba(39, 174, 96, 0.4);
+        }
+
+        .upword-contact-info {
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .upword-logo {
+                font-size: 2em;
+            }
+            
+            .quiz-title {
+                font-size: 1.5em;
+            }
+            
+            .upword-cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .upword-footer {
+                padding: 30px 20px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="logo">Up Word</div>
-        <h1>Business English Vocabulary</h1>
+        <div class="header">
+            <div class="upword-logo">UP WORD</div>
+            <div class="quiz-title">Business English Vocabulary</div>
+        </div>
         
         <div class="instructions">
             <strong>Instructions:</strong><br>
-            Choose the best word to complete each sentence.
+            Choose the best word to complete each sentence. Click "Validate Quiz" when you're ready to see your results!
         </div>
 
-        <div class="question">
-            <div class="question-text">1. We need to _______ our marketing strategy.</div>
-            <div class="options">
-                <div class="option">A) revise</div>
-                <div class="option">B) review</div>
-                <div class="option">C) reveal</div>
+        <form id="quizForm">
+            <div class="question-container">
+                <div class="question-text">1. We need to _______ our marketing strategy.</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q1" value="A" id="q1a">
+                        <label for="q1a">A) revise</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q1" value="B" id="q1b">
+                        <label for="q1b">B) review</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q1" value="C" id="q1c">
+                        <label for="q1c">C) reveal</label>
+                    </div>
+                </div>
+                <div class="feedback" id="feedback1"></div>
             </div>
-            <div class="correct-answer">Correct answer: A) revise</div>
-        </div>
 
-        <div class="question">
-            <div class="question-text">2. The project _______ has been moved to next month.</div>
-            <div class="options">
-                <div class="option">A) deadline</div>
-                <div class="option">B) lifeline</div>
-                <div class="option">C) outline</div>
+            <div class="question-container">
+                <div class="question-text">2. The project _______ has been moved to next month.</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q2" value="A" id="q2a">
+                        <label for="q2a">A) deadline</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q2" value="B" id="q2b">
+                        <label for="q2b">B) lifeline</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q2" value="C" id="q2c">
+                        <label for="q2c">C) outline</label>
+                    </div>
+                </div>
+                <div class="feedback" id="feedback2"></div>
             </div>
-            <div class="correct-answer">Correct answer: A) deadline</div>
-        </div>
 
-        <div class="question">
-            <div class="question-text">3. Could you _______ the main points from the meeting?</div>
-            <div class="options">
-                <div class="option">A) summarize</div>
-                <div class="option">B) sympathy</div>
-                <div class="option">C) synchronize</div>
+            <div class="question-container">
+                <div class="question-text">3. Could you _______ the main points from the meeting?</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q3" value="A" id="q3a">
+                        <label for="q3a">A) summarize</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q3" value="B" id="q3b">
+                        <label for="q3b">B) sympathy</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q3" value="C" id="q3c">
+                        <label for="q3c">C) synchronize</label>
+                    </div>
+                </div>
+                <div class="feedback" id="feedback3"></div>
             </div>
-            <div class="correct-answer">Correct answer: A) summarize</div>
-        </div>
 
-        <div class="question">
-            <div class="question-text">4. We're looking to _______ our customer base.</div>
-            <div class="options">
-                <div class="option">A) expand</div>
-                <div class="option">B) expend</div>
-                <div class="option">C) extend</div>
+            <div class="question-container">
+                <div class="question-text">4. We're looking to _______ our customer base.</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q4" value="A" id="q4a">
+                        <label for="q4a">A) expand</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q4" value="B" id="q4b">
+                        <label for="q4b">B) expend</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q4" value="C" id="q4c">
+                        <label for="q4c">C) extend</label>
+                    </div>
+                </div>
+                <div class="feedback" id="feedback4"></div>
             </div>
-            <div class="correct-answer">Correct answer: A) expand</div>
-        </div>
 
-        <div class="question">
-            <div class="question-text">5. The quarterly _______ shows positive growth.</div>
-            <div class="options">
-                <div class="option">A) rapport</div>
-                <div class="option">B) report</div>
-                <div class="option">C) support</div>
+            <div class="question-container">
+                <div class="question-text">5. The quarterly _______ shows positive growth.</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q5" value="A" id="q5a">
+                        <label for="q5a">A) rapport</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q5" value="B" id="q5b">
+                        <label for="q5b">B) report</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q5" value="C" id="q5c">
+                        <label for="q5c">C) support</label>
+                    </div>
+                </div>
+                <div class="feedback" id="feedback5"></div>
             </div>
-            <div class="correct-answer">Correct answer: B) report</div>
+
+            <button type="button" class="submit-button" onclick="validateQuiz()">🎯 Validate Quiz</button>
+        </form>
+
+        <div class="results" id="results">
+            <div class="score" id="score"></div>
+            <div class="comment" id="comment"></div>
         </div>
 
-        <button class="submit-btn">Submit Quiz</button>
-
-        <div class="footer">
-            <p>Envie de booster votre score ? Rendez-vous sur notre site</p>
-            <p><strong>upword.co.uk</strong></p>
-            <p>et découvrez nos formations</p>
+        <!-- DÉBUT DU COMPOSANT FOOTER UPWORD -->
+        <div class="upword-footer">
+            <div class="upword-footer-content">
+                <h3>🚀 Prêt à améliorer votre anglais ?</h3>
+                <p>Rejoignez des milliers de professionnels qui ont déjà transformé leur carrière grâce à nos formations d'anglais personnalisées. Cours individuels, groupes, préparation aux certifications...</p>
+                
+                <div class="upword-cta-buttons">
+                    <a href="https://upword.co.uk" target="_blank" class="upword-cta-button">
+                        🌐 Découvrir UPword
+                    </a>
+                    <a href="https://upword.co.uk/contact" target="_blank" class="upword-cta-button secondary">
+                        📞 Consultation gratuite
+                    </a>
+                </div>
+                
+                <div class="upword-contact-info">
+                    <p>📧 contact@upword.co.uk | 📱 Formation sur mesure | 🎯 Résultats garantis</p>
+                    <p>Centre de formation agréé • Formateurs natifs • Méthode immersive</p>
+                </div>
+            </div>
         </div>
+        <!-- FIN DU COMPOSANT FOOTER UPWORD -->
     </div>
+
+    <script>
+        function validateQuiz() {
+            const correctAnswers = ['A', 'A', 'A', 'A', 'B'];
+            const explanations = [
+                "✅ Correct! 'Revise' means to modify or change something.",
+                "✅ Correct! A 'deadline' is a time limit for completing something.",
+                "✅ Correct! 'Summarize' means to give the main points briefly.",
+                "✅ Correct! 'Expand' means to make larger or increase in size.",
+                "✅ Correct! A 'report' is a formal document with information."
+            ];
+            
+            let score = 0;
+            
+            // Check each question
+            for (let i = 1; i <= 5; i++) {
+                const selectedAnswer = document.querySelector(`input[name="q${i}"]:checked`);
+                const feedback = document.getElementById(`feedback${i}`);
+                
+                if (selectedAnswer) {
+                    if (selectedAnswer.value === correctAnswers[i-1]) {
+                        score++;
+                        feedback.className = 'feedback correct';
+                        feedback.innerHTML = `✅ ${explanations[i-1]}`;
+                    } else {
+                        feedback.className = 'feedback incorrect';
+                        feedback.innerHTML = `❌ Incorrect. The correct answer is ${correctAnswers[i-1]}. ${explanations[i-1]}`;
+                    }
+                } else {
+                    feedback.className = 'feedback incorrect';
+                    feedback.innerHTML = `❌ No answer selected. The correct answer is ${correctAnswers[i-1]}. ${explanations[i-1]}`;
+                }
+                
+                feedback.style.display = 'block';
+            }
+            
+            // Show results
+            const resultsDiv = document.getElementById('results');
+            const scoreDiv = document.getElementById('score');
+            const commentDiv = document.getElementById('comment');
+            
+            scoreDiv.textContent = `You got ${score}/5!`;
+            
+            // Dynamic comments based on score
+            if (score >= 4) {
+                commentDiv.textContent = "🎉 Excellent! You're ready for the next challenge!";
+                commentDiv.style.color = "#27ae60";
+            } else if (score >= 2) {
+                commentDiv.textContent = "👍 Good job! A few more tries and you'll master it.";
+                commentDiv.style.color = "#f39c12";
+            } else {
+                commentDiv.textContent = "💪 Keep practicing — you're getting there!";
+                commentDiv.style.color = "#e74c3c";
+            }
+            
+            resultsDiv.classList.add('show');
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Random background color on load
+        const colors = ['#8dc63f', '#023762'];
+        document.body.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    </script>
 </body>
 </html>
