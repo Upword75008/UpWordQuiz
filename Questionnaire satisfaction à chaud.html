@@ -1,0 +1,540 @@
+import React, { useState } from 'react';
+import { Star, Send, FileText, User, Calendar, MapPin, Users } from 'lucide-react';
+
+const FormationEvaluation = () => {
+  const [formData, setFormData] = useState({
+    // Informations de base
+    nom: '',
+    actionFormation: '',
+    lieuFormation: '',
+    dateFormation: '',
+    formationSuivie: '',
+    
+    // Évaluation générale (4 niveaux)
+    utiliteFormation: '',
+    reponseAttentes: '',
+    objectifsPedagogiques: '',
+    communicationObjectifs: '',
+    organisationDeroulement: '',
+    
+    // Ressources pédagogiques (3 niveaux)
+    clarteContenu: '',
+    qualiteSupports: '',
+    animationFormation: '',
+    progressionFormation: '',
+    qualiteGlobale: '',
+    recommandation: '',
+    
+    // Questions ouvertes
+    plusApprecies: '',
+    moinsApprecies: '',
+    satisfactionGenerale: 0,
+    suggestions: '',
+    
+    // Maîtrise des objectifs
+    maitrise: {
+      discours: '',
+      redaction: '',
+      comprehension: '',
+      voyage: '',
+      narration: '',
+      quotidien: ''
+    },
+    
+    // Auto-évaluation (0-10)
+    competences: {
+      discours: 5,
+      redaction: 5,
+      comprehension: 5,
+      voyage: 5,
+      narration: 5,
+      quotidien: 5
+    }
+  });
+
+  const handleInputChange = (field, value) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleNestedChange = (category, field, value) => {
+    setFormData(prev => ({
+      ...prev,
+      [category]: {
+        ...prev[category],
+        [field]: value
+      }
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    alert('Questionnaire soumis avec succès ! Merci pour votre retour.');
+    console.log('Données du formulaire:', formData);
+  };
+
+  const renderRadioGroup = (name, options, emoji = false) => (
+    <div className="flex flex-wrap gap-2">
+      {options.map((option, index) => (
+        <label key={index} className="flex items-center space-x-2 cursor-pointer bg-gray-50 hover:bg-gray-100 px-3 py-2 rounded-lg transition-colors">
+          <input
+            type="radio"
+            name={name}
+            value={option.value}
+            checked={formData[name] === option.value}
+            onChange={(e) => handleInputChange(name, e.target.value)}
+            className="text-blue-600"
+          />
+          <span className="text-sm">
+            {emoji && option.emoji && <span className="mr-1">{option.emoji}</span>}
+            {option.label}
+          </span>
+        </label>
+      ))}
+    </div>
+  );
+
+  const renderStarRating = (current, onChange) => (
+    <div className="flex space-x-1">
+      {[1, 2, 3, 4, 5].map((star) => (
+        <Star
+          key={star}
+          className={`w-8 h-8 cursor-pointer transition-colors ${
+            star <= current ? 'text-yellow-400 fill-current' : 'text-gray-300'
+          }`}
+          onClick={() => onChange(star)}
+        />
+      ))}
+    </div>
+  );
+
+  const renderSlider = (field, value, onChange) => (
+    <div className="space-y-2">
+      <input
+        type="range"
+        min="0"
+        max="10"
+        value={value}
+        onChange={(e) => onChange(parseInt(e.target.value))}
+        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+      />
+      <div className="flex justify-between text-xs text-gray-500">
+        <span>0</span>
+        <span className="font-semibold text-blue-600 text-lg">{value}/10</span>
+        <span>10</span>
+      </div>
+    </div>
+  );
+
+  const generalOptions = [
+    { value: '1', label: 'Pas du tout d\'accord', emoji: '😣' },
+    { value: '2', label: 'Plutôt pas d\'accord', emoji: '😏' },
+    { value: '3', label: 'Plutôt d\'accord', emoji: '🙂' },
+    { value: '4', label: 'Totalement d\'accord', emoji: '😁' }
+  ];
+
+  const resourcesOptions = [
+    { value: '1', label: 'Pas du tout', emoji: '😣' },
+    { value: '2', label: 'En partie', emoji: '🙂' },
+    { value: '3', label: 'Totalement', emoji: '😁' }
+  ];
+
+  const masteryOptions = [
+    { value: '1', label: 'Pas du tout' },
+    { value: '2', label: 'Insuffisamment' },
+    { value: '3', label: 'En partie' },
+    { value: '4', label: 'Totalement' }
+  ];
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8">
+      <div className="max-w-4xl mx-auto px-4">
+        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+          {/* Header */}
+          <div className="text-white p-6" style={{ background: '#023762' }}>
+            <div className="text-center mb-4">
+              <h1 className="text-4xl font-bold tracking-wider mb-2" style={{ color: '#ffffff' }}>
+                UP WORD
+              </h1>
+              <div className="w-20 h-1 bg-white mx-auto rounded-full opacity-80"></div>
+            </div>
+            <h2 className="text-2xl font-bold flex items-center justify-center">
+              <FileText className="mr-3" />
+              Évaluation à chaud - Formation terminée
+            </h2>
+            <p className="mt-2 opacity-90 text-center">
+              Votre avis nous est précieux pour améliorer nos formations
+            </p>
+          </div>
+
+          <div className="p-6 space-y-8">
+            {/* Informations générales */}
+            <section className="space-y-4">
+              <h2 className="text-xl font-semibold text-gray-800 border-b pb-2">
+                Informations générales
+              </h2>
+              
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
+                    <User className="w-4 h-4 mr-2" />
+                    Votre nom
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.nom}
+                    onChange={(e) => handleInputChange('nom', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
+                    <Calendar className="w-4 h-4 mr-2" />
+                    Date de formation
+                  </label>
+                  <input
+                    type="date"
+                    value={formData.dateFormation}
+                    onChange={(e) => handleInputChange('dateFormation', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
+                    <MapPin className="w-4 h-4 mr-2" />
+                    Lieu de formation
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.lieuFormation}
+                    onChange={(e) => handleInputChange('lieuFormation', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
+                    <Users className="w-4 h-4 mr-2" />
+                    Formateur : FERENCIK Jan
+                  </label>
+                  <input
+                    type="text"
+                    value="FERENCIK Jan"
+                    disabled
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg bg-gray-50"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium text-gray-700 mb-2 block">
+                  Quelle formation avez-vous suivie ?
+                </label>
+                <input
+                  type="text"
+                  value={formData.formationSuivie}
+                  onChange={(e) => handleInputChange('formationSuivie', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  required
+                />
+              </div>
+            </section>
+
+            {/* Évaluation générale */}
+            <section className="space-y-6">
+              <h2 className="text-xl font-semibold text-gray-800 border-b pb-2">
+                Évaluation générale de la formation
+              </h2>
+
+              <div className="space-y-6">
+                <div>
+                  <p className="font-medium text-gray-700 mb-3">
+                    Cette formation est-elle utile pour renforcer vos compétences dans votre poste actuel ?
+                  </p>
+                  {renderRadioGroup('utiliteFormation', generalOptions, true)}
+                </div>
+
+                <div>
+                  <p className="font-medium text-gray-700 mb-3">
+                    La formation a-t-elle répondu à vos attentes initiales ?
+                  </p>
+                  {renderRadioGroup('reponseAttentes', generalOptions, true)}
+                </div>
+
+                <div>
+                  <p className="font-medium text-gray-700 mb-3">
+                    Pensez-vous avoir atteint les objectifs pédagogiques prévus lors de la formation ?
+                  </p>
+                  {renderRadioGroup('objectifsPedagogiques', generalOptions, true)}
+                </div>
+
+                <div>
+                  <p className="font-medium text-gray-700 mb-3">
+                    Êtes-vous satisfait de la communication des objectifs et du programme avant la formation ?
+                  </p>
+                  {renderRadioGroup('communicationObjectifs', generalOptions, true)}
+                </div>
+
+                <div>
+                  <p className="font-medium text-gray-700 mb-3">
+                    Êtes-vous satisfait de l'organisation et du déroulement de la formation ?
+                  </p>
+                  {renderRadioGroup('organisationDeroulement', generalOptions, true)}
+                </div>
+              </div>
+            </section>
+
+            {/* Ressources pédagogiques */}
+            <section className="space-y-6">
+              <h2 className="text-xl font-semibold text-gray-800 border-b pb-2">
+                Ressources pédagogiques et animation
+              </h2>
+
+              <div className="space-y-6">
+                <div>
+                  <p className="font-medium text-gray-700 mb-3">
+                    Êtes-vous satisfait de la clarté du contenu des ressources proposées ?
+                  </p>
+                  {renderRadioGroup('clarteContenu', resourcesOptions, true)}
+                </div>
+
+                <div>
+                  <p className="font-medium text-gray-700 mb-3">
+                    Êtes-vous satisfait de la qualité des supports pédagogiques ?
+                  </p>
+                  {renderRadioGroup('qualiteSupports', resourcesOptions, true)}
+                </div>
+
+                <div>
+                  <p className="font-medium text-gray-700 mb-3">
+                    Êtes-vous satisfait de l'animation de la formation par le ou les intervenants ?
+                  </p>
+                  {renderRadioGroup('animationFormation', resourcesOptions, true)}
+                </div>
+
+                <div>
+                  <p className="font-medium text-gray-700 mb-3">
+                    Êtes-vous satisfait de la progression de la formation (durée, rythme, théorie/pratique) ?
+                  </p>
+                  {renderRadioGroup('progressionFormation', resourcesOptions, true)}
+                </div>
+
+                <div>
+                  <p className="font-medium text-gray-700 mb-3">
+                    Êtes-vous satisfait de la qualité globale de la formation ?
+                  </p>
+                  {renderRadioGroup('qualiteGlobale', resourcesOptions, true)}
+                </div>
+
+                <div>
+                  <p className="font-medium text-gray-700 mb-3">
+                    Recommanderiez-vous cette formation à une personne exerçant le même métier que vous ?
+                  </p>
+                  {renderRadioGroup('recommandation', resourcesOptions, true)}
+                </div>
+              </div>
+            </section>
+
+            {/* Questions ouvertes */}
+            <section className="space-y-6">
+              <h2 className="text-xl font-semibold text-gray-800 border-b pb-2">
+                Votre retour d'expérience
+              </h2>
+
+              <div>
+                <label className="font-medium text-gray-700 mb-2 block">
+                  Quels éléments avez-vous le plus appréciés ?
+                </label>
+                <textarea
+                  value={formData.plusApprecies}
+                  onChange={(e) => handleInputChange('plusApprecies', e.target.value)}
+                  rows="3"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Décrivez les aspects positifs de la formation..."
+                />
+              </div>
+
+              <div>
+                <label className="font-medium text-gray-700 mb-2 block">
+                  Quels éléments avez-vous le moins appréciés ?
+                </label>
+                <textarea
+                  value={formData.moinsApprecies}
+                  onChange={(e) => handleInputChange('moinsApprecies', e.target.value)}
+                  rows="3"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Décrivez les points d'amélioration..."
+                />
+              </div>
+
+              <div>
+                <label className="font-medium text-gray-700 mb-3 block">
+                  Quelle est votre satisfaction générale après ce cours ?
+                </label>
+                {renderStarRating(formData.satisfactionGenerale, (value) => handleInputChange('satisfactionGenerale', value))}
+              </div>
+            </section>
+
+            {/* Maîtrise des objectifs */}
+            <section className="space-y-6">
+              <h2 className="text-xl font-semibold text-gray-800 border-b pb-2">
+                Maîtrise des objectifs du programme
+              </h2>
+
+              <div className="space-y-6">
+                <div>
+                  <p className="font-medium text-gray-700 mb-3">
+                    Produire un discours simple et cohérent sur des sujets familiers et dans ses domaines d'intérêt
+                  </p>
+                  {renderRadioGroup('maitrise.discours', masteryOptions)}
+                </div>
+
+                <div>
+                  <p className="font-medium text-gray-700 mb-3">
+                    Lire et rédiger des textes et des e-mails simples sur des sujets familiers, ou professionnels
+                  </p>
+                  {renderRadioGroup('maitrise.redaction', masteryOptions)}
+                </div>
+
+                <div>
+                  <p className="font-medium text-gray-700 mb-3">
+                    Comprendre les points essentiels quand un langage clair et standard est utilisé
+                  </p>
+                  {renderRadioGroup('maitrise.comprehension', masteryOptions)}
+                </div>
+
+                <div>
+                  <p className="font-medium text-gray-700 mb-3">
+                    Se débrouiller dans la plupart des situations rencontrées en voyage
+                  </p>
+                  {renderRadioGroup('maitrise.voyage', masteryOptions)}
+                </div>
+
+                <div>
+                  <p className="font-medium text-gray-700 mb-3">
+                    Raconter un événement, une expérience ou un rêve, décrire un espoir ou un but
+                  </p>
+                  {renderRadioGroup('maitrise.narration', masteryOptions)}
+                </div>
+
+                <div>
+                  <p className="font-medium text-gray-700 mb-3">
+                    Être à l'aise dans la plupart des situations de la vie quotidienne
+                  </p>
+                  {renderRadioGroup('maitrise.quotidien', masteryOptions)}
+                </div>
+              </div>
+            </section>
+
+            {/* Auto-évaluation */}
+            <section className="space-y-6">
+              <h2 className="text-xl font-semibold text-gray-800 border-b pb-2">
+                Auto-évaluation de vos compétences (0-10)
+              </h2>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <p className="font-medium text-gray-700 mb-3">
+                    Produire un discours simple et cohérent
+                  </p>
+                  {renderSlider('discours', formData.competences.discours, (value) => 
+                    handleNestedChange('competences', 'discours', value)
+                  )}
+                </div>
+
+                <div>
+                  <p className="font-medium text-gray-700 mb-3">
+                    Lire et rédiger des textes simples
+                  </p>
+                  {renderSlider('redaction', formData.competences.redaction, (value) => 
+                    handleNestedChange('competences', 'redaction', value)
+                  )}
+                </div>
+
+                <div>
+                  <p className="font-medium text-gray-700 mb-3">
+                    Comprendre les points essentiels
+                  </p>
+                  {renderSlider('comprehension', formData.competences.comprehension, (value) => 
+                    handleNestedChange('competences', 'comprehension', value)
+                  )}
+                </div>
+
+                <div>
+                  <p className="font-medium text-gray-700 mb-3">
+                    Se débrouiller en voyage
+                  </p>
+                  {renderSlider('voyage', formData.competences.voyage, (value) => 
+                    handleNestedChange('competences', 'voyage', value)
+                  )}
+                </div>
+
+                <div>
+                  <p className="font-medium text-gray-700 mb-3">
+                    Raconter des expériences
+                  </p>
+                  {renderSlider('narration', formData.competences.narration, (value) => 
+                    handleNestedChange('competences', 'narration', value)
+                  )}
+                </div>
+
+                <div>
+                  <p className="font-medium text-gray-700 mb-3">
+                    Situations de la vie quotidienne
+                  </p>
+                  {renderSlider('quotidien', formData.competences.quotidien, (value) => 
+                    handleNestedChange('competences', 'quotidien', value)
+                  )}
+                </div>
+              </div>
+            </section>
+
+            {/* Suggestions */}
+            <section className="space-y-4">
+              <h2 className="text-xl font-semibold text-gray-800 border-b pb-2">
+                Suggestions d'amélioration
+              </h2>
+              
+              <div>
+                <label className="font-medium text-gray-700 mb-2 block">
+                  Avez-vous des suggestions pour améliorer cette formation ?
+                </label>
+                <textarea
+                  value={formData.suggestions}
+                  onChange={(e) => handleInputChange('suggestions', e.target.value)}
+                  rows="4"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Vos suggestions et commentaires..."
+                />
+              </div>
+            </section>
+
+            {/* Bouton de soumission */}
+            <div className="pt-6 border-t">
+              <button
+                type="button"
+                onClick={handleSubmit}
+                className="w-full text-white py-3 px-6 rounded-lg font-semibold hover:opacity-90 transition-all duration-200 flex items-center justify-center space-x-2"
+                style={{ background: '#023762' }}
+              >
+                <Send className="w-5 h-5" />
+                <span>Envoyer l'évaluation</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default FormationEvaluation;
