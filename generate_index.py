@@ -1,3 +1,5 @@
+import os
+
 site_title = "UpWord Quiz"
 html_files = [f for f in os.listdir('.') if f.endswith('.html') and f != 'index.html']
 html_files.sort()
