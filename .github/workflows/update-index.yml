@@ -12,9 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
-          persist-credentials: false
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -24,8 +25,21 @@ jobs:
       - name: Run script to update index.html
         run: python generate_index.py
 
+      - name: Check if index.html was modified
+        id: check_changes
+        run: |
+          if git diff --quiet index.html; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
       - name: Commit and push changes
-        uses: stefanzweifel/git-auto-commit-action@v4
+        if: steps.check_changes.outputs.changed == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "Auto-update index.html"
+          commit_message: "Auto-update index.html [skip ci]"
+          file_pattern: index.html
           branch: ${{ github.ref_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
