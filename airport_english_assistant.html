@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Airport English - Visual Learning Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .ebook-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .cover {
+            background: linear-gradient(45deg, #1e3c72, #2a5298);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cover::before {
+            content: "✈️";
+            position: absolute;
+            font-size: 150px;
+            opacity: 0.1;
+            top: 20px;
+            right: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .cover h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .cover p {
+            font-size: 1.3em;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .page {
+            padding: 40px;
+            min-height: 600px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .page:last-child {
+            border-bottom: none;
+        }
+
+        .chapter-title {
+            font-size: 2.5em;
+            color: #2a5298;
+            margin-bottom: 30px;
+            text-align: center;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 15px;
+        }
+
+        .scenario-box {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            position: relative;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .scenario-box:hover {
+            transform: translateY(-5px);
+        }
+
+        .scenario-title {
+            font-size: 1.5em;
+            color: #1e3c72;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .scenario-icon {
+            font-size: 2em;
+            margin-right: 15px;
+        }
+
+        .dialogue {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .speaker {
+            font-weight: bold;
+            color: #2a5298;
+            margin-bottom: 8px;
+        }
+
+        .english-text {
+            font-style: italic;
+            color: #1e3c72;
+            margin-bottom: 5px;
+            font-size: 1.1em;
+        }
+
+        .french-text {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        .vocabulary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .vocab-card {
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .vocab-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .vocab-term {
+            font-weight: bold;
+            color: #1e3c72;
+            font-size: 1.2em;
+            margin-bottom: 8px;
+        }
+
+        .vocab-definition {
+            color: #666;
+            font-size: 1em;
+        }
+
+        .illustration-placeholder {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            color: white;
+            margin: 20px auto;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .page-number {
+            text-align: center;
+            color: #999;
+            font-size: 0.9em;
+            margin-top: 30px;
+            padding: 20px;
+        }
+
+        .navigation {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 25px;
+            padding: 10px 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            margin: 0 5px;
+            padding: 5px 10px;
+            border-radius: 50%;
+            transition: background 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .tips-box {
+            background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 5px solid #e17055;
+        }
+
+        .tips-title {
+            font-weight: bold;
+            color: #d63031;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 4px;
+            animation: progress 3s ease-in-out;
+        }
+
+        @keyframes progress {
+            from { width: 0%; }
+            to { width: 100%; }
+        }
+
+        @media (max-width: 768px) {
+            .cover h1 { font-size: 2.5em; }
+            .page { padding: 20px; }
+            .chapter-title { font-size: 2em; }
+            .vocabulary-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="navigation">
+        <button class="nav-btn" onclick="previousPage()">←</button>
+        <span id="pageIndicator">1/6</span>
+        <button class="nav-btn" onclick="nextPage()">→</button>
+    </div>
+
+    <div class="ebook-container">
+        <!-- Cover Page -->
+        <div class="page" id="page1">
+            <div class="cover">
+                <h1>AIRPORT ENGLISH</h1>
+                <p>Visual Learning Guide for Customer Service</p>
+                <p>40-Hour Training Program • B1 Level</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 15%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chapter 1: Essential Vocabulary -->
+        <div class="page" id="page2" style="display:none;">
+            <h2 class="chapter-title">🏢 THE AIRPORT AND ITS AREAS</h2>
+            
+            <div class="vocabulary-grid">
+                <div class="vocab-card">
+                    <div class="illustration-placeholder">🏢</div>
+                    <div class="vocab-term">Terminal</div>
+                    <div class="vocab-definition">Terminal (bâtiment principal)</div>
+                </div>
+                
+                <div class="vocab-card">
+                    <div class="illustration-placeholder">🚪</div>
+                    <div class="vocab-term">Gate</div>
+                    <div class="vocab-definition">Porte d'embarquement</div>
+                </div>
+                
+                <div class="vocab-card">
+                    <div class="illustration-placeholder">🛡️</div>
+                    <div class="vocab-term">Security Checkpoint</div>
+                    <div class="vocab-definition">Contrôle de sécurité</div>
+                </div>
+                
+                <div class="vocab-card">
+                    <div class="illustration-placeholder">🛄</div>
+                    <div class="vocab-term">Baggage Claim</div>
+                    <div class="vocab-definition">Retrait des bagages</div>
+                </div>
+            </div>
+
+            <div class="tips-box">
+                <div class="tips-title">💡 Essential Phrases</div>
+                <div class="dialogue">
+                    <div class="english-text">"Welcome to the aerodrome!"</div>
+                    <div class="french-text">Bienvenue à l'aérodrome !</div>
+                </div>
+                <div class="dialogue">
+                    <div class="english-text">"The departures hall is on the first floor"</div>
+                    <div class="french-text">Le hall des départs est au premier étage</div>
+                </div>
+            </div>
+
+            <div class="page-number">Page 1 of 6</div>
+        </div>
+
+        <!-- Chapter 2: Reception & Courtesy -->
+        <div class="page" id="page3" style="display:none;">
+            <h2 class="chapter-title">🎯 RECEPTION AND COURTESY</h2>
+            
+            <div class="scenario-box">
+                <div class="scenario-title">
+                    <span class="scenario-icon">👋</span>
+                    Standard Greeting Formulas
+                </div>
+                <div class="illustration-placeholder">🤝</div>
+                
+                <div class="dialogue">
+                    <div class="english-text">"Good morning, how may I help you?"</div>
+                    <div class="french-text">Bonjour, comment puis-je vous aider ?</div>
+                </div>
+                
+                <div class="dialogue">
+                    <div class="english-text">"Welcome to [Airport name]"</div>
+                    <div class="french-text">Bienvenue à [nom de l'aéroport]</div>
+                </div>
+                
+                <div class="dialogue">
+                    <div class="english-text">"I'd be happy to assist you with that"</div>
+                    <div class="french-text">Je serai ravi(e) de vous aider avec cela</div>
+                </div>
+            </div>
+
+            <div class="scenario-box">
+                <div class="scenario-title">
+                    <span class="scenario-icon">🙏</span>
+                    Courtesy Phrases
+                </div>
+                <div class="illustration-placeholder">⭐</div>
+                
+                <div class="dialogue">
+                    <div class="english-text">"Thank you for your patience"</div>
+                    <div class="french-text">Merci pour votre patience</div>
+                </div>
+                
+                <div class="dialogue">
+                    <div class="english-text">"Have a pleasant flight"</div>
+                    <div class="french-text">Bon vol</div>
+                </div>
+            </div>
+
+            <div class="page-number">Page 2 of 6</div>
+        </div>
+
+        <!-- Chapter 3: Giving Directions -->
+        <div class="page" id="page4" style="display:none;">
+            <h2 class="chapter-title">🧭 GIVING DIRECTIONS</h2>
+            
+            <div class="scenario-box">
+                <div class="scenario-title">
+                    <span class="scenario-icon">🗺️</span>
+                    Directional Vocabulary
+                </div>
+                <div class="illustration-placeholder">🧭</div>
+                
+                <div class="vocabulary-grid">
+                    <div class="vocab-card">
+                        <div class="vocab-term">Straight ahead</div>
+                        <div class="vocab-definition">Tout droit</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-term">Turn left/right</div>
+                        <div class="vocab-definition">Tournez à gauche/droite</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-term">Take the elevator</div>
+                        <div class="vocab-definition">Prenez l'ascenseur</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tips-box">
+                <div class="tips-title">🎯 Direction Examples</div>
+                <div class="dialogue">
+                    <div class="english-text">"Go straight ahead for about 100 meters"</div>
+                    <div class="french-text">Allez tout droit sur environ 100 mètres</div>
+                </div>
+                <div class="dialogue">
+                    <div class="english-text">"Turn left after the duty-free shop"</div>
+                    <div class="french-text">Tournez à gauche après le magasin duty-free</div>
+                </div>
+            </div>
+
+            <div class="page-number">Page 3 of 6</div>
+        </div>
+
+        <!-- Chapter 4: Phone Communication -->
+        <div class="page" id="page5" style="display:none;">
+            <h2 class="chapter-title">📱 PHONE COMMUNICATION</h2>
+            
+            <div class="scenario-box">
+                <div class="scenario-title">
+                    <span class="scenario-icon">📞</span>
+                    Professional Call Reception
+                </div>
+                <div class="illustration-placeholder">☎️</div>
+                
+                <div class="dialogue">
+                    <div class="speaker">Reception:</div>
+                    <div class="english-text">"Good morning, [Airport Name] information desk, how can I assist you?"</div>
+                    <div class="french-text">Bonjour, bureau d'information [Nom aéroport], comment puis-je vous aider ?</div>
+                </div>
+            </div>
+
+            <div class="scenario-box">
+                <div class="scenario-title">
+                    <span class="scenario-icon">🔄</span>
+                    Call Management
+                </div>
+                <div class="illustration-placeholder">⏱️</div>
+                
+                <div class="dialogue">
+                    <div class="english-text">"Please hold while I check that for you"</div>
+                    <div class="french-text">Veuillez patienter pendant que je vérifie pour vous</div>
+                </div>
+                
+                <div class="dialogue">
+                    <div class="english-text">"I'll transfer you to the right department"</div>
+                    <div class="french-text">Je vais vous transférer au bon service</div>
+                </div>
+            </div>
+
+            <div class="page-number">Page 4 of 6</div>
+        </div>
+
+        <!-- Chapter 5: Real Scenarios -->
+        <div class="page" id="page6" style="display:none;">
+            <h2 class="chapter-title">🎭 TRAINING SCENARIOS</h2>
+            
+            <div class="scenario-box">
+                <div class="scenario-title">
+                    <span class="scenario-icon">✈️</span>
+                    Scenario A: Lost Passenger
+                </div>
+                <div class="illustration-placeholder">😰</div>
+                
+                <div class="dialogue">
+                    <div class="speaker">Passenger:</div>
+                    <div class="english-text">"Excuse me, I can't find gate C15. My flight leaves in 30 minutes!"</div>
+                    <div class="french-text">Excusez-moi, je ne trouve pas la porte C15. Mon vol part dans 30 minutes !</div>
+                </div>
+                
+                <div class="dialogue">
+                    <div class="speaker">Agent:</div>
+                    <div class="english-text">"Don't worry, I'll help you. Gate C15 is in the international terminal."</div>
+                    <div class="french-text">Ne vous inquiétez pas, je vais vous aider. La porte C15 est dans le terminal international.</div>
+                </div>
+            </div>
+
+            <div class="scenario-box">
+                <div class="scenario-title">
+                    <span class="scenario-icon">🚖</span>
+                    Scenario B: Emergency Taxi
+                </div>
+                <div class="illustration-placeholder">🚗</div>
+                
+                <div class="dialogue">
+                    <div class="speaker">Passenger:</div>
+                    <div class="english-text">"I missed the hotel shuttle! I have an important meeting in an hour."</div>
+                    <div class="french-text">J'ai raté la navette de l'hôtel ! J'ai une réunion importante dans une heure.</div>
+                </div>
+                
+                <div class="dialogue">
+                    <div class="speaker">Agent:</div>
+                    <div class="english-text">"No problem, I'll call a taxi immediately. What's your destination?"</div>
+                    <div class="french-text">Pas de problème, je vais appeler un taxi immédiatement. Quelle est votre destination ?</div>
+                </div>
+            </div>
+
+            <div class="page-number">Page 5 of 6</div>
+        </div>
+
+        <!-- Final Page: Progress & Resources -->
+        <div class="page" id="page7" style="display:none;">
+            <h2 class="chapter-title">📊 YOUR LEARNING JOURNEY</h2>
+            
+            <div class="tips-box">
+                <div class="tips-title">🎯 Weekly Self-Assessment</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 85%;"></div>
+                </div>
+                <p><strong>Week 1-2:</strong> ✅ Master basic vocabulary (50+ words)</p>
+                <p><strong>Week 3-4:</strong> ✅ Hold a 5-minute phone conversation</p>
+                <p><strong>Week 5:</strong> ✅ Handle 3 difficult situations with ease</p>
+            </div>
+
+            <div class="scenario-box">
+                <div class="scenario-title">
+                    <span class="scenario-icon">🎯</span>
+                    Measurable Objectives
+                </div>
+                <div class="illustration-placeholder">📈</div>
+                
+                <ul style="margin: 20px 0; padding-left: 20px;">
+                    <li><strong>Vocabulary:</strong> 200 specialized words mastered</li>
+                    <li><strong>Listening:</strong> 80% success rate on audio exercises</li>
+                    <li><strong>Speaking:</strong> 15-minute simulation fluency</li>
+                    <li><strong>Confidence:</strong> 90% positive self-assessment</li>
+                </ul>
+            </div>
+
+            <div class="scenario-box" style="text-align: center;">
+                <div class="scenario-title">
+                    <span class="scenario-icon">🌟</span>
+                    Congratulations!
+                </div>
+                <div class="illustration-placeholder">🏆</div>
+                <p style="font-size: 1.2em; color: #1e3c72; margin-top: 15px;">
+                    You've completed the Airport English Visual Learning Guide!<br>
+                    <em>Vous avez terminé le Guide d'Apprentissage Visuel d'Anglais Aéroportuaire !</em>
+                </p>
+            </div>
+
+            <div class="page-number">Page 6 of 6</div>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 1;
+        const totalPages = 7;
+
+        function showPage(pageNum) {
+            // Hide all pages
+            for (let i = 1; i <= totalPages; i++) {
+                document.getElementById(`page${i}`).style.display = 'none';
+            }
+            
+            // Show current page
+            document.getElementById(`page${pageNum}`).style.display = 'block';
+            
+            // Update page indicator
+            document.getElementById('pageIndicator').textContent = `${pageNum}/${totalPages}`;
+        }
+
+        function nextPage() {
+            if (currentPage < totalPages) {
+                currentPage++;
+                showPage(currentPage);
+            }
+        }
+
+        function previousPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                showPage(currentPage);
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight') {
+                nextPage();
+            } else if (event.key === 'ArrowLeft') {
+                previousPage();
+            }
+        });
+
+        // Auto-advance on cover page after 3 seconds
+        setTimeout(() => {
+            if (currentPage === 1) {
+                nextPage();
+            }
+        }, 4000);
+    </script>
+</body>
+</html>
