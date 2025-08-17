@@ -1,0 +1,349 @@
+import React, { useState } from 'react';
+
+const UPwordQuiz = () => {
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [selectedAnswer, setSelectedAnswer] = useState('');
+  const [showResult, setShowResult] = useState(false);
+  const [score, setScore] = useState(0);
+  const [quizComplete, setQuizComplete] = useState(false);
+
+  const questions = [
+    {
+      question: "'Livre' veut dire... en anglais (attention au piège) :",
+      options: ["A) book", "B) pound", "C) library", "D) page"],
+      correct: "B) pound",
+      explanation: "En anglais, 'pound' signifie livre (poids), pas 'book' qui signifie livre (objet à lire). C'est un faux-ami classique !"
+    },
+    {
+      question: "Que signifie le mot anglais 'library' ?",
+      options: ["A) librairie", "B) bibliothèque", "C) liberté", "D) littérature"],
+      correct: "B) bibliothèque",
+      explanation: "'Library' = bibliothèque. Une librairie en anglais se dit 'bookstore'."
+    },
+    {
+      question: "'Pensées' veut dire... en anglais (attention au piège) :",
+      options: ["A) thoughts", "B) pansies", "C) ideas", "D) flowers"],
+      correct: "B) pansies",
+      explanation: "Ces fleurs s'appellent 'pansies' en anglais. 'Thoughts' signifie pensées (idées). Un piège linguistique amusant !"
+    },
+    {
+      question: "Que signifie 'actually' en anglais ?",
+      options: ["A) actuellement", "B) en fait", "C) activement", "D) récemment"],
+      correct: "B) en fait",
+      explanation: "'Actually' = en fait, en réalité. 'Actuellement' se dit 'currently'."
+    },
+    {
+      question: "'Neuf' veut dire... en anglais :",
+      options: ["A) new", "B) nine", "C) knife", "D) enough"],
+      correct: "B) nine",
+      explanation: "En anglais, 'nine' signifie neuf (chiffre 9), pas 'new' qui signifie neuf (nouveau). Un piège numérique classique !"
+    },
+    {
+      question: "Que signifie 'fabric' en anglais ?",
+      options: ["A) fabrique", "B) tissu", "C) fabrication", "D) usine"],
+      correct: "B) tissu",
+      explanation: "'Fabric' = tissu, étoffe. 'Fabrique/usine' se dit 'factory'."
+    },
+    {
+      question: "Comment dit-on 'rester' en anglais ?",
+      options: ["A) rest", "B) stay", "C) remain", "D) stop"],
+      correct: "B) stay",
+      explanation: "'Stay' ou 'remain' = rester. 'Rest' signifie se reposer."
+    },
+    {
+      question: "Que signifie 'comprehensive' en anglais ?",
+      options: ["A) compréhensif", "B) complet", "C) compréhension", "D) comprendre"],
+      correct: "B) complet",
+      explanation: "'Comprehensive' = complet, exhaustif. 'Compréhensif' se dit 'understanding'."
+    },
+    {
+      question: "Comment dit-on 'prétendre' (affirmer) en anglais ?",
+      options: ["A) pretend", "B) claim", "C) assert", "D) maintain"],
+      correct: "B) claim",
+      explanation: "'Claim' = prétendre (affirmer). 'Pretend' signifie faire semblant."
+    },
+    {
+      question: "Que signifie 'eventually' en anglais ?",
+      options: ["A) éventuellement", "B) finalement", "C) possiblement", "D) récemment"],
+      correct: "B) finalement",
+      explanation: "'Eventually' = finalement. 'Éventuellement' se dit 'possibly'."
+    }
+  ];
+
+  const handleAnswerSelect = (answer) => {
+    setSelectedAnswer(answer);
+  };
+
+  const handleNext = () => {
+    if (!selectedAnswer) return;
+    
+    const isCorrect = selectedAnswer === questions[currentQuestion].correct;
+    if (isCorrect) {
+      setScore(score + 1);
+    }
+    
+    setShowResult(true);
+    
+    setTimeout(() => {
+      if (currentQuestion < questions.length - 1) {
+        setCurrentQuestion(currentQuestion + 1);
+        setSelectedAnswer('');
+        setShowResult(false);
+      } else {
+        setQuizComplete(true);
+      }
+    }, 2500);
+  };
+
+  const resetQuiz = () => {
+    setCurrentQuestion(0);
+    setSelectedAnswer('');
+    setShowResult(false);
+    setScore(0);
+    setQuizComplete(false);
+  };
+
+  const getScoreMessage = () => {
+    if (score >= 8) return "Excellent! You're ready for the next challenge! 🏆";
+    if (score >= 6) return "Good job! A few more tries and you'll master it. 👏";
+    if (score >= 4) return "Keep practicing — you're getting there! 💪";
+    return "Don't give up! Every expert was once a beginner. 📚";
+  };
+
+  if (quizComplete) {
+    return (
+      <div style={{ minHeight: '100vh', backgroundColor: '#023762', padding: '20px' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+          {/* Header */}
+          <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+            <h1 style={{ color: 'white', fontSize: '2.5rem', marginBottom: '10px' }}>
+              📚 Up Word
+            </h1>
+            <p style={{ color: '#cde2e8', fontSize: '1.2rem' }}>Master English • Quiz Platform</p>
+          </div>
+
+          {/* Results */}
+          <div style={{ backgroundColor: '#cde2e8', borderRadius: '15px', padding: '40px', marginBottom: '40px' }}>
+            <div style={{ textAlign: 'center', marginBottom: '30px' }}>
+              <div style={{ fontSize: '4rem', marginBottom: '20px' }}>🏆</div>
+              <h2 style={{ color: '#023762', fontSize: '2rem', marginBottom: '15px' }}>Quiz Terminé !</h2>
+              <div style={{ fontSize: '3rem', fontWeight: 'bold', color: '#023762', marginBottom: '15px' }}>
+                {score}/{questions.length}
+              </div>
+              <p style={{ color: '#023762', fontSize: '1.3rem', marginBottom: '10px' }}>
+                {getScoreMessage()}
+              </p>
+              <p style={{ color: '#023762', fontSize: '1.1rem' }}>
+                Pourcentage: {Math.round((score / questions.length) * 100)}%
+              </p>
+            </div>
+            
+            <button
+              onClick={resetQuiz}
+              style={{
+                width: '100%',
+                backgroundColor: '#023762',
+                color: 'white',
+                padding: '15px',
+                borderRadius: '10px',
+                border: 'none',
+                fontSize: '1.1rem',
+                fontWeight: 'bold',
+                cursor: 'pointer'
+              }}
+            >
+              🔄 Recommencer le Quiz
+            </button>
+          </div>
+
+          {/* Footer */}
+          <div style={{ backgroundColor: '#023762', color: 'white', padding: '30px', borderRadius: '10px', border: '2px solid #cde2e8' }}>
+            <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+              <h3 style={{ color: '#cde2e8', fontSize: '1.5rem', marginBottom: '10px' }}>📚 Up Word</h3>
+              <p style={{ color: '#cde2e8', marginBottom: '20px' }}>
+                Master English with interactive quizzes and exercises!
+              </p>
+              <div style={{ marginBottom: '15px' }}>
+                <p style={{ color: '#cde2e8', marginBottom: '5px' }}>📧 hello@upword.co.uk</p>
+                <p style={{ color: '#cde2e8', marginBottom: '5px' }}>📞 +44 (0) 20 1234 5678</p>
+                <p style={{ color: '#cde2e8' }}>📍 London, UK</p>
+              </div>
+              <a 
+                href="https://upword.co.uk" 
+                style={{
+                  display: 'inline-block',
+                  backgroundColor: '#cde2e8',
+                  color: '#023762',
+                  padding: '12px 25px',
+                  borderRadius: '8px',
+                  textDecoration: 'none',
+                  fontWeight: 'bold',
+                  marginTop: '15px'
+                }}
+              >
+                🚀 Start Learning Now!
+              </a>
+            </div>
+            <div style={{ textAlign: 'center', fontSize: '0.9rem', color: '#cde2e8', marginTop: '20px' }}>
+              © 2025 Up Word. All rights reserved.
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ minHeight: '100vh', backgroundColor: '#023762', padding: '20px' }}>
+      <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+        {/* Header */}
+        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+          <h1 style={{ color: 'white', fontSize: '2.5rem', marginBottom: '10px' }}>
+            📚 Up Word
+          </h1>
+          <p style={{ color: '#cde2e8', fontSize: '1.2rem' }}>
+            Quiz des Faux-Amis 🇫🇷↔️🇬🇧
+          </p>
+        </div>
+
+        {/* Quiz Container */}
+        <div style={{ backgroundColor: '#cde2e8', borderRadius: '15px', padding: '30px', marginBottom: '40px' }}>
+          {/* Progress */}
+          <div style={{ marginBottom: '30px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
+              <h2 style={{ color: '#023762', fontSize: '1.5rem', margin: 0 }}>Quiz des Faux-Amis</h2>
+              <span style={{ color: '#023762', fontWeight: 'bold' }}>
+                {currentQuestion + 1}/{questions.length}
+              </span>
+            </div>
+            
+            <div style={{ width: '100%', backgroundColor: '#023762', borderRadius: '10px', height: '8px', marginBottom: '15px', opacity: 0.3 }}>
+              <div 
+                style={{ 
+                  width: `${((currentQuestion + 1) / questions.length) * 100}%`, 
+                  backgroundColor: '#023762', 
+                  height: '8px', 
+                  borderRadius: '10px',
+                  opacity: 1,
+                  transition: 'width 0.3s ease'
+                }}
+              ></div>
+            </div>
+            
+            <div style={{ textAlign: 'right', color: '#023762', fontWeight: 'bold' }}>
+              Score: {score}/{currentQuestion + (showResult ? 1 : 0)}
+            </div>
+          </div>
+
+          {!showResult ? (
+            <div style={{ backgroundColor: 'white', borderRadius: '10px', padding: '30px' }}>
+              <h3 style={{ color: '#023762', fontSize: '1.3rem', marginBottom: '25px', lineHeight: '1.5' }}>
+                {questions[currentQuestion].question}
+              </h3>
+              
+              <div style={{ marginBottom: '25px' }}>
+                {questions[currentQuestion].options.map((option, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleAnswerSelect(option)}
+                    style={{
+                      width: '100%',
+                      padding: '15px',
+                      marginBottom: '10px',
+                      borderRadius: '8px',
+                      border: selectedAnswer === option ? '2px solid #023762' : '2px solid #ddd',
+                      backgroundColor: selectedAnswer === option ? '#cde2e8' : 'white',
+                      color: '#023762',
+                      fontSize: '1rem',
+                      fontWeight: 'bold',
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                      transition: 'all 0.2s ease'
+                    }}
+                    onMouseOver={(e) => {
+                      if (selectedAnswer !== option) {
+                        e.target.style.backgroundColor = '#f5f5f5';
+                      }
+                    }}
+                    onMouseOut={(e) => {
+                      if (selectedAnswer !== option) {
+                        e.target.style.backgroundColor = 'white';
+                      }
+                    }}
+                  >
+                    {option}
+                  </button>
+                ))}
+              </div>
+              
+              <button
+                onClick={handleNext}
+                disabled={!selectedAnswer}
+                style={{
+                  width: '100%',
+                  padding: '15px',
+                  borderRadius: '8px',
+                  border: 'none',
+                  backgroundColor: selectedAnswer ? '#023762' : '#ccc',
+                  color: 'white',
+                  fontSize: '1.1rem',
+                  fontWeight: 'bold',
+                  cursor: selectedAnswer ? 'pointer' : 'not-allowed',
+                  transition: 'background-color 0.2s ease'
+                }}
+              >
+                {currentQuestion === questions.length - 1 ? '🏁 Terminer' : '➡️ Suivant'}
+              </button>
+            </div>
+          ) : (
+            <div style={{ backgroundColor: 'white', borderRadius: '10px', padding: '30px', textAlign: 'center' }}>
+              <div style={{ fontSize: '4rem', marginBottom: '20px' }}>
+                {selectedAnswer === questions[currentQuestion].correct ? '✅' : '❌'}
+              </div>
+              <h3 style={{ 
+                color: selectedAnswer === questions[currentQuestion].correct ? 'green' : 'red',
+                fontSize: '1.5rem',
+                marginBottom: '20px'
+              }}>
+                {selectedAnswer === questions[currentQuestion].correct ? 'Correct !' : 'Incorrect !'}
+              </h3>
+              
+              <div style={{ backgroundColor: '#cde2e8', borderRadius: '8px', padding: '20px', borderLeft: '4px solid #023762' }}>
+                <p style={{ color: '#023762', fontWeight: 'bold', marginBottom: '10px', fontSize: '1.1rem' }}>
+                  💡 Explication :
+                </p>
+                <p style={{ color: '#023762', lineHeight: '1.5' }}>
+                  {questions[currentQuestion].explanation}
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Footer */}
+        <div style={{ backgroundColor: '#023762', color: 'white', padding: '25px', borderRadius: '10px', border: '2px solid #cde2e8', textAlign: 'center' }}>
+          <h3 style={{ color: '#cde2e8', marginBottom: '10px' }}>📚 Up Word</h3>
+          <p style={{ color: '#cde2e8', marginBottom: '15px', fontSize: '0.9rem' }}>
+            Master English with interactive quizzes!
+          </p>
+          <a 
+            href="https://upword.co.uk" 
+            style={{
+              display: 'inline-block',
+              backgroundColor: '#cde2e8',
+              color: '#023762',
+              padding: '10px 20px',
+              borderRadius: '6px',
+              textDecoration: 'none',
+              fontWeight: 'bold'
+            }}
+          >
+            Visit upword.co.uk
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default UPwordQuiz;
